@@ -1,0 +1,200 @@
+{{- define "main" }}
+
+{{- $tocPosition := .Param "TocPosition" | default "left" }}
+{{- $tocHover := .Param "tocHover" | default false }}
+
+<div class="post-container">
+  {{- if and (.Param "ShowToc") (or (eq $tocPosition "left") (eq $tocPosition "right") (eq $tocPosition "auto")) }}
+  <aside class="toc-sidebar{{ if eq $tocPosition "auto" }} toc-auto{{ else }} {{ $tocPosition }}{{ end }}{{ if $tocHover }} toc-hover{{ end }}">
+    {{- partial "toc.html" . }}
+  </aside>
+  {{- end }}
+
+  <article class="post-single" {{ if in .File.Path "protected" }}data-pagefind-ignore{{ else }}data-pagefind-body{{ end }}>
+    <header class="post-header">
+      {{ partial "breadcrumbs.html" . }}
+      <h1 class="post-title entry-hint-parent">
+        {{ .Title }}
+        {{- if .Draft }}
+        <span class="entry-hint" title="Draft">
+          <svg xmlns="http://www.w3.org/2000/svg" height="35" viewBox="0 -960 960 960" fill="currentColor">
+            <path
+              d="M160-410v-60h300v60H160Zm0-165v-60h470v60H160Zm0-165v-60h470v60H160Zm360 580v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q9 9 13 20t4 22q0 11-4.5 22.5T862.09-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z" />
+          </svg>
+        </span>
+        {{- end }}
+      </h1>
+      {{- if .Description }}
+      <div class="post-description">
+        {{ .Description }}
+      </div>
+      {{- end }}
+      {{- if not (.Param "hideMeta") }}
+      <div class="post-meta">
+        {{- partial "post_meta.html" . -}}
+        {{- partial "translation_list.html" . -}}
+        {{- partial "edit_post.html" . -}}
+        {{- partial "post_canonical.html" . -}}
+      </div>
+      {{- end }}
+    </header>
+
+    {{- if .Content }}
+    <div class="post-content">
+      {{- if (.Param "enableAnchoredHeadings") }}
+      {{- partial "anchored_headings.html" .Content -}}
+      {{- else }}{{ .Content }}{{ end }}
+    </div>
+    {{- end }}
+
+    <footer class="post-footer">
+      {{- $tags := .Language.Params.Taxonomies.tag | default "tags" }}
+      <ul class="post-tags">
+        {{- range ($.GetTerms $tags) }}
+        <li><a href="{{ .Permalink }}">{{ .LinkTitle }}</a></li>
+        {{- end }}
+      </ul>
+      {{- if (.Param "ShowPostNavLinks") }}
+      {{- partial "post_nav_links.html" . }}
+      {{- end }}
+      {{- if (and site.Params.ShowShareButtons (ne .Params.disableShare true)) }}
+      {{- partial "share_icons.html" . -}}
+      {{- end }}
+    </footer>
+
+    {{- if (.Param "comments") }}
+    {{- partial "comments.html" . }}
+    {{- end }}
+  </article>
+</div>
+
+{{- if $tocHover }}
+<script>
+  var tocHoverDelay = parseInt("{{ .Site.Params.tocHoverDelay | default 200 }}");
+  var tocHideDelay = parseInt("{{ .Site.Params.tocHideDelay | default 2000 }}");
+  document.addEventListener('DOMContentLoaded', function () {
+    const tocSidebar = document.querySelector('.toc-sidebar.toc-hover');
+    const postContent = document.querySelector('.post-content');
+    let hoverTimer = null;
+    let hideTimer = null;
+    let currentPosition = null;
+
+    // 设置目录的垂直位置从文章标题下方开始
+    const postTitle = document.querySelector('.post-title');
+    if (postTitle) {
+      const titleRect = postTitle.getBoundingClientRect();
+      tocSidebar.style.top = (titleRect.bottom + window.scrollY) + 'px';
+    }
+
+    // 页面两侧的检测区域
+    const leftZone = document.createElement('div');
+    leftZone.className = 'toc-hover-zone left';
+    document.body.appendChild(leftZone);
+
+    const rightZone = document.createElement('div');
+    rightZone.className = 'toc-hover-zone right';
+    document.body.appendChild(rightZone);
+
+    // 显示目录
+    function showToc() {
+      // 清除可能存在的隐藏计时器
+      if (hideTimer) {
+        clearTimeout(hideTimer);
+        hideTimer = null;
+      }
+      if (tocSidebar.classList.contains('toc-auto') && currentPosition) {
+        tocSidebar.classList.remove('left', 'right');
+        tocSidebar.classList.add(currentPosition);
+      }
+      tocSidebar.style.opacity = '1';
+      tocSidebar.style.visibility = 'visible';
+    }
+
+    // 隐藏目录
+    function hideToc() {
+      tocSidebar.style.opacity = '0';
+      tocSidebar.style.visibility = 'hidden';
+    }
+
+    // 延迟隐藏目录
+    function delayHideToc() {
+      hideTimer = setTimeout(hideToc, tocHideDelay);
+    }
+
+    // 添加悬停检测区域的事件监听
+    leftZone.addEventListener('mouseenter', function () {
+      currentPosition = 'left';
+      // 清除可能存在的隐藏计时器
+      if (hideTimer) {
+        clearTimeout(hideTimer);
+        hideTimer = null;
+      }
+      // 设置显示计时器
+      hoverTimer = setTimeout(showToc, tocHoverDelay);
+    });
+
+    rightZone.addEventListener('mouseenter', function () {
+      currentPosition = 'right';
+      // 清除可能存在的隐藏计时器
+      if (hideTimer) {
+        clearTimeout(hideTimer);
+        hideTimer = null;
+      }
+      // 设置显示计时器
+      hoverTimer = setTimeout(showToc, tocHoverDelay);
+    });
+    leftZone.addEventListener('mouseleave', function () {
+      // 清除显示计时器
+      if (hoverTimer) {
+        clearTimeout(hoverTimer);
+        hoverTimer = null;
+      }
+    });
+
+    rightZone.addEventListener('mouseleave', function () {
+      // 清除显示计时器
+      if (hoverTimer) {
+        clearTimeout(hoverTimer);
+        hoverTimer = null;
+      }
+    });
+
+    // 目录区域的事件监听
+    if (tocSidebar) {
+      tocSidebar.addEventListener('mouseenter', function () {
+        // 清除所有计时器
+        if (hoverTimer) {
+          clearTimeout(hoverTimer);
+          hoverTimer = null;
+        }
+        if (hideTimer) {
+          clearTimeout(hideTimer);
+          hideTimer = null;
+        }
+        // 立即显示目录
+        showToc();
+      });
+
+      tocSidebar.addEventListener('mouseleave', function () {
+        // 延迟2秒隐藏目录
+        delayHideToc();
+      });
+    }
+
+    // 正文区域的事件监听
+    if (postContent) {
+      postContent.addEventListener('mouseenter', function () {
+        // 如果目录已经显示，延迟2秒隐藏
+        if (tocSidebar.style.opacity === '1' || tocSidebar.style.visibility === 'visible') {
+          delayHideToc();
+        }
+      });
+    }
+
+    // 初始隐藏目录
+    hideToc();
+  });
+</script>
+{{- end }}
+
+{{- end }}{{/* end main */}}

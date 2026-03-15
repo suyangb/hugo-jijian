@@ -1,0 +1,49 @@
+{{- $scratch := newScratch }}
+
+{{- if not .Date.IsZero -}}
+{{- $hoverDate := .Date -}}
+{{- $dateFormat := default ":date_long" site.Params.DateFormat -}}
+{{- $hasTime := or (in $dateFormat "15") (in $dateFormat "03") -}}
+{{- $hoverFormatId := cond $hasTime "hover_date_format" "hover_date_format_no_time" -}}
+{{- $hoverFormat := i18n $hoverFormatId -}}
+{{- if $hoverFormat -}}
+  {{- $hoverDate = .Date.Format $hoverFormat -}}
+{{- end -}}
+{{- $scratch.Add "meta" (slice (printf "<span title='%s'>%s</span>" $hoverDate (.Date | time.Format $dateFormat))) }}
+{{- end }}
+
+{{- if or (.Param "ShowReadingTime") (.Param "ShowWordCount") -}}
+{{- $content := replaceRE "\\s+" "" (.Content | plainify | htmlUnescape) -}}
+{{- $iTotal := strings.RuneCount (replaceRE "[^\\x{4e00}-\\x{9fa5}]" "" $content) -}}
+{{- $inum := strings.RuneCount (replaceRE "[^0-9]" "" $content) -}}
+{{- $eTotal := strings.RuneCount (replaceRE "[^\\x00-\\xff]" "" $content) -}}
+{{- $sTotal := strings.RuneCount (replaceRE "[\\x00-\\xff]" "" $content) -}}
+{{- $zishu := add $inum $iTotal -}}
+{{- $biaodian := sub $sTotal $iTotal -}}
+{{- $zimu := sub $eTotal $inum -}}
+
+{{- if (.Param "ShowReadingTime") -}}
+{{- $speed := site.Params.readingSpeed | default 200.0 | float -}}
+{{- $readTime := math.Ceil (div $zishu $speed) | int -}}
+{{- $scratch.Add "meta" (slice (printf "<span>%s</span>" (i18n "read_time" $readTime | default (printf "%d min"
+$readTime)))) }}
+{{- end }}
+
+{{- if (.Param "ShowWordCount") -}}
+{{- $title := printf (i18n "word_count_title" | default "包含：%d个汉字，%d个标点(全角)，%d个字母(半角)，%d个数字") $iTotal $biaodian $zimu
+$inum -}}
+{{- $wordCountStr := i18n "words" $zishu | default (printf "%d字" $zishu) -}}
+{{- $scratch.Add "meta" (slice (printf "<span title='%s'>%s</span>" $title $wordCountStr)) }}
+{{- end }}
+
+{{- end }}
+
+{{- if not (.Param "hideAuthor") -}}
+{{- with (partial "author.html" .) }}
+{{- $scratch.Add "meta" (slice (printf "<span>%s</span>" .)) }}
+{{- end }}
+{{- end }}
+
+{{- with ($scratch.Get "meta") }}
+{{- delimit . "&nbsp;·&nbsp;" | safeHTML -}}
+{{- end -}}

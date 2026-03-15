@@ -1,0 +1,43 @@
+- id: prev_page
+  translation: "上一頁"
+
+- id: next_page
+  translation: "下一頁"
+
+- id: read_time
+  translation:
+    one : "1 分鐘"
+    other: "{{ .Count }} 分鐘"
+
+- id: toc
+  translation: "目錄"
+
+- id: translations
+  translation: "語言"
+
+- id: home
+  translation: "首頁"
+
+- id: edit_post
+  translation: "編輯"
+
+
+- id: code_copy
+  translation: "複製"
+
+- id: code_copied
+  translation: "已複製！"
+
+- id: word_count_title
+  translation: "包含：%d個漢字，%d個標點(全角)，%d個字母(半角)，%d個數字"
+
+- id: words
+  translation:
+    one : "1字"
+    other: "{{ .Count }}字"
+
+- id: hover_date_format
+  translation: "2006-01-02 15:04:05 北京時間"
+
+- id: hover_date_format_no_time
+  translation: "2006-01-02 北京時間"

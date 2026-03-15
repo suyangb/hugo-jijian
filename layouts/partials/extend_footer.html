@@ -1,0 +1,123 @@
+{{- /* Footer custom content area start */ -}}
+{{- /* Insert any custom code web-analytics, resources, etc. here */ -}}
+
+<script>
+    (function () {
+        // 创建预览容器
+        const preview = document.createElement('div');
+        preview.className = 'cover-preview';
+        preview.innerHTML = '<img src="" alt="cover preview">';
+        document.body.appendChild(preview);
+
+        const previewImg = preview.querySelector('img');
+        let currentArticle = null;
+        let isImageLoaded = false;
+        let rafId = null;
+
+        // 图片预加载缓存
+        const imageCache = new Map();
+
+        // 选择器：匹配文章列表和时光轴中带封面图的条目
+        const coverSelector = 'article[data-cover], .archive-entry[data-cover]';
+
+        // 预加载所有封面图
+        document.querySelectorAll(coverSelector).forEach(article => {
+            const src = article.dataset.cover;
+            if (src && !imageCache.has(src)) {
+                const img = new Image();
+                img.src = src;
+                img.onload = () => imageCache.set(src, true);
+                img.onerror = () => imageCache.set(src, false);
+            }
+        });
+
+        // 更新预览图位置（跟随鼠标）
+        function updatePosition(e) {
+            const offsetX = 20; // 水平偏移
+            const offsetY = 20; // 垂直偏移
+            const previewWidth = 260;
+            const previewHeight = 180;
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+
+            let x = e.clientX + offsetX;
+            let y = e.clientY + offsetY;
+
+            // 防止超出视口右边界
+            if (x + previewWidth > viewportWidth - 10) {
+                x = e.clientX - previewWidth - offsetX;
+            }
+
+            // 防止超出视口下边界
+            if (y + previewHeight > viewportHeight - 10) {
+                y = e.clientY - previewHeight - offsetY;
+            }
+
+            // 确保不超出左边界和上边界
+            x = Math.max(10, x);
+            y = Math.max(10, y);
+
+            preview.style.left = x + 'px';
+            preview.style.top = y + 'px';
+        }
+
+        // 鼠标进入文章条目
+        function handleMouseEnter(e) {
+            const article = e.currentTarget;
+            const coverUrl = article.dataset.cover;
+
+            if (!coverUrl) return;
+
+            currentArticle = article;
+            isImageLoaded = false;
+
+            previewImg.src = coverUrl;
+
+            // 如果图片已缓存，直接显示
+            if (imageCache.get(coverUrl)) {
+                isImageLoaded = true;
+                updatePosition(e);
+                preview.classList.add('visible');
+            } else {
+                // 等待图片加载
+                previewImg.onload = function () {
+                    isImageLoaded = true;
+                    imageCache.set(coverUrl, true);
+                    if (currentArticle === article) {
+                        preview.classList.add('visible');
+                    }
+                };
+            }
+
+            updatePosition(e);
+        }
+
+        // 鼠标移动
+        function handleMouseMove(e) {
+            if (currentArticle && isImageLoaded) {
+                if (rafId) cancelAnimationFrame(rafId);
+                rafId = requestAnimationFrame(() => updatePosition(e));
+            }
+        }
+
+        // 鼠标离开文章条目
+        function handleMouseLeave() {
+            currentArticle = null;
+            isImageLoaded = false;
+            preview.classList.remove('visible');
+            if (rafId) {
+                cancelAnimationFrame(rafId);
+                rafId = null;
+            }
+        }
+
+        // 为所有带封面图的条目绑定事件（文章列表 + 时光轴）
+        document.querySelectorAll(coverSelector).forEach(article => {
+            article.addEventListener('mouseenter', handleMouseEnter);
+            article.addEventListener('mousemove', handleMouseMove);
+            article.addEventListener('mouseleave', handleMouseLeave);
+        });
+    })();
+</script>
+
+{{- /* Footer custom content area end */ -}}

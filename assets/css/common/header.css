@@ -1,0 +1,376 @@
+.header {
+    position: relative;
+    z-index: 100;
+}
+
+.nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: calc(var(--nav-width) + var(--gap) * 2);
+    margin-inline-start: auto;
+    margin-inline-end: auto;
+    line-height: var(--header-height);
+}
+
+.nav a {
+    display: block;
+}
+
+.logo,
+#menu {
+    display: flex;
+    margin: auto var(--gap);
+}
+
+.logo {
+    flex-wrap: inherit;
+}
+
+.logo a {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.logo a img, .logo a svg {
+    display: inline;
+    vertical-align: middle;
+    pointer-events: none;
+    transform: translate(0, -10%);
+    border-radius: 6px;
+    margin-inline-end: 8px;
+}
+
+button#theme-toggle {
+    font-size: 26px;
+    margin: auto 4px;
+}
+
+button.menu-toggle {
+    display: none;
+    font-size: 26px;
+    margin: auto 4px;
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    padding: 0;
+}
+
+[data-theme="dark"] #moon {
+    display: none;
+}
+
+[data-theme="light"] #sun {
+    display: none;
+}
+
+#menu {
+    list-style: none;
+    word-break: keep-all;
+    white-space: nowrap;
+    position: relative;
+    overflow: visible;
+    display: flex;
+}
+
+#menu li + li {
+    margin-inline-start: var(--gap);
+}
+
+#menu > li {
+    display: inline-block;
+    position: relative;
+}
+
+#menu a {
+    font-size: 16px;
+    display: inline-flex;
+    align-items: center;
+    line-height: 1.2;
+    padding-bottom: 4px;
+    transition: text-shadow 0.2s ease;
+    font-weight: 500;
+    width: auto;
+    white-space: nowrap;
+}
+
+#menu a:hover {
+    text-shadow: 0 0 1px currentColor, 0 0 1px currentColor;
+}
+
+#menu .active {
+    font-weight: 500;
+    border-bottom: 2px solid currentColor;
+    padding-bottom: 4px;
+}
+
+#menu .active:hover {
+    text-shadow: 0 0 1px currentColor, 0 0 1px currentColor;
+}
+
+/* Submenu Styles */
+#menu .has-children > a {
+    position: relative;
+}
+
+.submenu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    min-width: auto;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    white-space: nowrap;
+    text-align: left;
+    line-height: 1.2;
+}
+
+.submenu-item {
+    margin: 4px 0;
+    display: block;
+    text-align: left;
+    width: auto;
+    padding: 0;
+    height: auto;
+}
+
+/* 关键修复：重置子菜单项的左边距 */
+.submenu-item + .submenu-item {
+    margin-inline-start: 0 !important;
+    margin-top: 6px;
+}
+
+.submenu-item a {
+    display: block;
+    padding: 0;
+    font-size: 16px;
+    color: var(--primary);
+    text-decoration: none;
+    transition: text-shadow 0.2s ease;
+    margin: 0;
+    width: 100%;
+    text-align: left;
+    line-height: 1.2;
+    padding-bottom: 4px;
+    font-weight: 500;
+}
+
+.submenu-item a:hover {
+    text-shadow: 0 0 1px currentColor, 0 0 1px currentColor;
+}
+
+.submenu-item .active {
+    background-color: transparent;
+    border-bottom: none;
+    font-weight: 700;
+}
+
+.submenu-item span {
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+/* Show submenu on hover */
+#menu .has-children:hover > .submenu {
+    display: block;
+}
+
+/* 菜单遮罩样式 */
+.menu-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.menu-overlay.active {
+    display: block;
+    opacity: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    /* 显示汉堡菜单按钮 */
+    button.menu-toggle {
+        display: block;
+        z-index: 1001;
+    }
+    
+    /* 隐藏默认菜单 */
+    #menu {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--theme);
+        z-index: 1000;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        overflow: auto;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        /* 确保菜单覆盖整个屏幕，包括滚动条区域 */
+        padding: 2rem;
+        box-sizing: border-box;
+    }
+    
+    /* 显示菜单时的样式 */
+    #menu.active {
+        display: flex;
+        opacity: 1;
+        align-items: flex-start;
+        text-align: left;
+    }
+    
+    /* 重置菜单项样式 */
+    #menu li + li {
+        margin-inline-start: 0;
+    }
+    
+    #menu > li {
+        display: block;
+        margin: 0 0 calc(var(--gap) * 1.5) 0;
+        width: 100%;
+        max-width: 400px;
+    }
+    
+    #menu a {
+        font-size: 24px;
+        display: flex;
+        justify-content: flex-start;
+        padding: var(--gap);
+        line-height: 1.5;
+        /* 增加文字对比度 */
+        color: var(--primary);
+        width: 100%;
+        max-width: 400px;
+        margin: 0;
+    }
+    
+    /* 子菜单样式调整 - 简化层级结构 */
+    .submenu {
+        display: block;
+        position: static;
+        transform: none;
+        min-width: auto;
+        margin: calc(var(--gap) * 0.25) 0 0 0;
+        padding: 0;
+        background: var(--theme);
+        width: 100%;
+        max-width: 400px;
+    }
+    
+    .submenu-item {
+        margin: 0;
+        padding: 0;
+    }
+    
+    /* 父菜单项样式 */
+    #menu > li > a {
+        font-size: 32px;
+        padding: calc(var(--gap) * 1) var(--gap);
+        line-height: 1.5;
+        color: var(--primary);
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        width: 100%;
+        max-width: 400px;
+        margin: 0;
+        font-weight: 700;
+    }
+    
+    /* 子菜单项样式 */
+    .submenu-item a {
+        font-size: 14px;
+        padding: calc(var(--gap) * 0.25) var(--gap);
+        line-height: 0.4;
+        color: var(--tertiary);
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        width: 100%;
+        max-width: 400px;
+        margin: 0;
+        font-weight: 400;
+    }
+    
+    /* 移动端父菜单悬停效果：添加文字阴影 */
+    #menu > li > a:hover {
+        font-weight: inherit;
+        text-shadow: 0 0 1px currentColor, 0 0 1px currentColor;
+    }
+    
+    /* 恢复移动端子菜单悬停效果：变粗 */
+    .submenu-item a:hover {
+        text-shadow: 0 0 1px currentColor, 0 0 1px currentColor;
+    }
+    
+    #menu .active:hover {
+        text-shadow: 0 0 1px currentColor, 0 0 1px currentColor;
+    }
+    
+    /* 调整子菜单项间距 */
+    .submenu-item + .submenu-item {
+        margin-top: calc(var(--gap) * 0.25);
+    }
+    
+    /* 隐藏子菜单箭头 */
+    #menu .has-children > a svg {
+        display: none;
+    }
+    
+    /* 重置活动项样式 */
+    #menu .active {
+        border-bottom: none;
+        font-weight: 700;
+    }
+    
+    /* 增强遮罩效果 */
+    .menu-overlay {
+        background: rgba(0, 0, 0, 0.7);
+    }
+}
+
+.lang-switch li,
+.lang-switch ul,
+.logo-switches {
+    display: inline-flex;
+    margin: auto 4px;
+}
+
+.lang-switch {
+    display: flex;
+    flex-wrap: inherit;
+}
+
+.lang-switch a {
+    margin: auto 3px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.logo-switches {
+    flex-wrap: inherit;
+}

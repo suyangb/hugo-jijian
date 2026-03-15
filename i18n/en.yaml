@@ -1,0 +1,43 @@
+- id: prev_page
+  translation: "Prev"
+
+- id: next_page
+  translation: "Next"
+
+- id: read_time
+  translation:
+    one : "1 min"
+    other: "{{ .Count }} min"
+
+- id: toc
+  translation: "Table of Contents"
+
+- id: translations
+  translation: "Translations"
+
+- id: home
+  translation: "Home"
+
+- id: edit_post
+  translation: "Edit"
+
+
+- id: code_copy
+  translation: "copy"
+
+- id: code_copied
+  translation: "copied!"
+
+- id: word_count_title
+  translation: "Contains: %d Chinese characters, %d full-width punctuations, %d letters, %d numbers"
+
+- id: words
+  translation:
+    one : "1 word"
+    other: "{{ .Count }} words"
+
+- id: hover_date_format
+  translation: ""
+
+- id: hover_date_format_no_time
+  translation: ""

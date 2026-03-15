@@ -1,0 +1,118 @@
+{{- /* Comments area start */ -}}
+{{- /* Giscus Comments with loading and error handling */ -}}
+{{ if .Site.Params.giscus.repo }}
+<div class="giscus-container">
+  <!-- Loading state -->
+  <div class="giscus-loading">
+    <div class="giscus-spinner"></div>
+    <p>加载评论中...</p>
+  </div>
+  
+  <!-- Error state -->
+  <div class="giscus-error" style="display: none;">
+    <p>哎呀！Giscus评论模块加载失败啦～</p>
+    <p style="font-size: 0.8em;">Giscus是基于Github Discussions的，或许当前网络无法访问Github哦！</p>
+    <button class="giscus-retry" onclick="window.location.reload()">重新加载</button>
+  </div>
+  
+  <!-- Comments will be inserted here by giscus -->
+  <div id="giscus-comments"></div>
+</div>
+
+<script>
+// Set up event listeners for giscus
+window.addEventListener('message', function(event) {
+  if (event.origin !== 'https://giscus.app') return;
+  
+  const data = event.data;
+  if (data.giscus) {
+    // Hide loading indicator when comments are loaded
+    document.querySelector('.giscus-loading').style.display = 'none';
+    document.querySelector('#giscus-comments').style.display = 'block';
+  }
+});
+
+// Set timeout for error handling
+setTimeout(function() {
+  const giscusIframe = document.querySelector('iframe.giscus-frame');
+  const loadingIndicator = document.querySelector('.giscus-loading');
+  
+  if (loadingIndicator && loadingIndicator.style.display !== 'none') {
+    // Loading timed out, show error message
+    loadingIndicator.style.display = 'none';
+    document.querySelector('.giscus-error').style.display = 'block';
+  }
+}, 10000); // 10 seconds timeout
+</script>
+
+<style>
+.giscus-container {
+  margin-top: 2rem;
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: var(--card-bg-color, #f9f9f9);
+  border: 1px solid var(--border-color, #eaeaea);
+}
+
+.giscus-loading, .giscus-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  color: var(--text-color, #333);
+}
+
+.giscus-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--border-color, #eaeaea);
+  border-top-color: var(--accent-color, #007bff);
+  border-radius: 50%;
+  animation: giscus-spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes giscus-spin {
+  to { transform: rotate(360deg); }
+}
+
+.giscus-retry {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  background-color: var(--accent-color, #007bff);
+  color: white;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.giscus-retry:hover {
+  opacity: 0.9;
+}
+
+#giscus-comments {
+  display: none;
+}
+
+</style>
+<script src="https://giscus.app/client.js"
+        data-repo="{{ .Site.Params.giscus.repo }}"
+        data-repo-id="{{ .Site.Params.giscus.repoId }}"
+        data-category="{{ .Site.Params.giscus.category }}"
+        data-category-id="{{ .Site.Params.giscus.categoryId }}"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="1"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="{{ .Site.Language.Lang }}"
+        crossorigin="anonymous"
+        async>
+</script>
+
+{{ end }}
+{{- /* Comments area end */ -}}
