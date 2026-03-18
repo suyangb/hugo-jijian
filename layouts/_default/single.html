@@ -4,7 +4,7 @@
 {{- $tocHover := .Param "tocHover" | default false }}
 
 <div class="post-container">
-  {{- if and (.Param "ShowToc") (or (eq $tocPosition "left") (eq $tocPosition "right") (eq $tocPosition "auto")) }}
+  {{- if and (.Param "ShowToc" | default true) (or (eq $tocPosition "left") (eq $tocPosition "right") (eq $tocPosition "auto")) }}
   <aside class="toc-sidebar{{ if eq $tocPosition "auto" }} toc-auto{{ else }} {{ $tocPosition }}{{ end }}{{ if $tocHover }} toc-hover{{ end }}">
     {{- partial "toc.html" . }}
   </aside>

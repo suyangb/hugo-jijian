@@ -1389,6 +1389,12 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="shareButtons">分享按钮列表（逗号分隔） <span class="config-key">(params.ShareButtons)</span></label>
+                        <input type="text" id="shareButtons" placeholder="x, linkedin, reddit, facebook, whatsapp, telegram, ycombinator">
+                        <small class="hint">可选值：x, linkedin, reddit, facebook, whatsapp, telegram, ycombinator</small>
+                    </div>
+
+                    <div class="form-group">
                         <div class="checkbox-group">
                             <input type="checkbox" id="showPostNavLinks">
                             <label for="showPostNavLinks">显示文章导航（上一篇/下一篇） <span
@@ -2521,6 +2527,18 @@
             yaml = addFieldBlock(yaml, '  ', 'defaultTheme', getValue('defaultTheme'));
             yaml += `  hideSummary: ${document.getElementById('hideSummary').checked}\n`;
             yaml += `  ShowShareButtons: ${document.getElementById('showShareButtons').checked}\n`;
+
+            const shareButtons = document.getElementById('shareButtons').value.trim();
+            if (shareButtons) {
+                const shareButtonsArray = shareButtons.split(',').map(s => s.trim()).filter(s => s);
+                if (shareButtonsArray.length > 0) {
+                    yaml += `  ShareButtons:\n`;
+                    shareButtonsArray.forEach(btn => {
+                        yaml += `    - ${btn}\n`;
+                    });
+                }
+            }
+
             yaml += `  ShowCodeCopyButtons: ${document.getElementById('showCodeCopyButtons').checked}\n`;
             yaml += `  ShowRssButtonInSectionTermList: ${document.getElementById('showRssButtonInSectionTermList').checked}\n`;
             yaml += `  ShowBreadCrumbs: ${document.getElementById('showBreadCrumbs').checked}\n\n`;
@@ -2988,6 +3006,12 @@ export default function middleware(req) {
                     if (el) el.value = config.hugoYaml[key];
                 } else if (key === 'menus' || key === 'socialIcons' || key === 'cardButtons' || key === 'languages') {
                     // 这些特殊处理
+                } else if (key === 'shareButtons') {
+                    // ShareButtons 是数组，转换为逗号分隔的字符串
+                    const el = document.getElementById('shareButtons');
+                    if (el && Array.isArray(config.hugoYaml[key])) {
+                        el.value = config.hugoYaml[key].join(', ');
+                    }
                 } else {
                     const el = document.getElementById(key);
                     if (el) {
@@ -3259,6 +3283,7 @@ export default function middleware(req) {
             let inCardMode = false;
             let inPortalMode = false;
             let inFooter = false;
+            let inShareButtons = false;
             let currentSocialIcon = null;
             let cardModeEnabled = false;
             let portalModeEnabled = false;
@@ -3283,6 +3308,7 @@ export default function middleware(req) {
                     inCardMode = false;
                     inPortalMode = false;
                     inFooter = false;
+                    inShareButtons = false;
                 }
 
                 if (inParams) {
@@ -3294,6 +3320,7 @@ export default function middleware(req) {
                         inCardMode = false;
                         inPortalMode = false;
                         inFooter = false;
+                        inShareButtons = false;
 
                         if (trimmed.startsWith('description:')) {
                             config.hugoYaml.description = trimmed.substring('description:'.length).trim();
@@ -3325,6 +3352,9 @@ export default function middleware(req) {
                             inPortalMode = true;
                         } else if (trimmed === 'footer:') {
                             inFooter = true;
+                        } else if (trimmed === 'ShareButtons:') {
+                            inShareButtons = true;
+                            config.hugoYaml.shareButtons = [];
                         } else if (trimmed.startsWith('comments:')) {
                             config.hugoYaml.comments = trimmed.includes('true');
                         } else if (trimmed.startsWith('showtoc:') || trimmed.startsWith('Showtoc:')) {
@@ -3413,6 +3443,14 @@ export default function middleware(req) {
                             } else if (trimmed.startsWith('hoverImage:')) {
                                 currentSocialIcon.hoverImage = trimmed.substring('hoverImage:'.length).trim();
                             }
+                        }
+                    }
+
+                    // ShareButtons 内字段
+                    if (inShareButtons && indent === 4 && trimmed.startsWith('-')) {
+                        const btn = trimmed.substring(1).trim();
+                        if (btn) {
+                            config.hugoYaml.shareButtons.push(btn);
                         }
                     }
 
