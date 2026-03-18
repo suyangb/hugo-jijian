@@ -2657,7 +2657,8 @@ export const config = {
 
 export default function middleware(req) {
   const url = new URL(req.url);
-  const path = url.pathname.endsWith('/') ? url.pathname : \`\${url.pathname}/\`;
+  const decodedPath = decodeURIComponent(url.pathname);
+  const path = decodedPath.endsWith('/') ? decodedPath : \`\${decodedPath}/\`;
   const cookies = req.headers.get('cookie') || '';
   
   const safePath = btoa(unescape(encodeURIComponent(path))).replace(/[=/+]/g, '');
