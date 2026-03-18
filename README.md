@@ -9,22 +9,20 @@
 
 jijian 继承了 PaperMod 的简洁、响应式、无依赖等优点，并在此基础上进行了如下改进和个性化调整：
 
+- **可视化配置工具**：提供开箱即用的 `config-tools.html` 配置工具，支持所有主题配置项的可视化设置、实时预览生成的 YAML 配置、自动处理配置项之间的依赖关系，以及一键生成 `hugo.yaml`、`package.json`、`middleware.js` 文件。
 - **完美的中文统计体验**：彻底重构了 Hugo 与 PaperMod 原本对中文极不友好的字数统计逻辑。内置精确的正则分离算法，精准识别并统计汉字、字母和数字；基于精准字数计算出更合理的阅读时长（支持在 `hugo.yaml` 中配置 `readingSpeed` 设定个人阅读速度）。
-- **更极简的视觉风格**：去除冗余装饰，优化排版与留白，整体视觉更清爽纯粹。
 - **文章列表封面交互优化**：取消了原本在 Posts 和 Archives 页面列表中直接展现大面积图片占据篇幅的封面显示形式；改为更干练的纯文字列表排版，并新增了 **鼠标悬停预览封面** 功能（鼠标移至文章标题或列表项上方区域时，以浮窗形式展示文章封面图）。
 - **导航菜单增强**：为顶部主导航栏新增及支持了 **子菜单导航**；同时对移动端（手机模式）下的折叠菜单栏样式与交互进行了重新设计与调优，提供更为精致友好的手机阅读体验。
 - **本土化社交图标整合聚拢**：新增了哔哩哔哩（Bilibili）、豆瓣等诸多国内主流社交媒体的专属 SVG 图标。主页社交区域更是引入了悬挂式二维码气泡功能，经过 `hoverImage` 配置后，鼠标移至对应的图标上方即可自动浮起弹出该平台的二维码名片。
-- **特定语言专心维护**：主动移除了原版主题中多达五六十种、不仅臃肿且因深度特化定制后无法完美兼容其余环境小语种支持；当前主动瘦身缩减并声明仅专门长期提供和维护对 **简体中文（zh）、繁体中文（zh-tw）与英文（en）** 的支持！
+- **特定语言专心维护**：主动移除了原版主题中多达五六十种、不仅臃肿且因深度特化定制后无法完美兼容其余环境小语种支持；当前主动瘦身缩减并声明仅专门长期提供和维护对 **简体中文（zh-cn）、繁体中文（zh-tw）与英文（en）** 的支持！
 - **中文古文竖排支持**：移除了原版中阿拉伯语使用的 `rtl` 特性，新增了 `vertical` 短代码，专门完美支持中文古诗词和部分特殊引用文段的从右到左竖排版展现。
-- **自定义布局与底层架构重构**：首页信息结构、独立文章页以及归档的底层布局更加灵活。重构梳理了部分模板和布局脚本层，使结构代码相较于原版更加清晰明了，方便二次深度定制与开发。
-- **代码区块加强**：保留了优秀的 Chroma 高亮支持，同时也进一步调优了代码区块面板的显示效果以及配套的一键复制按钮样式。
+- **代码区块加强**：支持切换多种优秀的 Chroma 高亮样式，同时也进一步调优了代码区块面板的显示效果以及配套的一键复制按钮样式。
 - **全新的 Pagefind 搜索方案**：废弃了原版 PaperMod 使用的 Fuse.js 方案，全面接入了高性能静态搜索引擎 **Pagefind**。这为中文用户带来了极致的搜索体验：极速的索引加载、精准的长句匹配以及美观的搜索结果预览，且对大体量站点的搜索性能有着质的飞跃。
 - **视频自适应与专属 Bilibili 短代码**：全面优化了文章中嵌入 `iframe`（如各大视频平台外链）的样式，使其默认宽度自适应并保持 16:9 画幅比例自动缩放，配合全局圆角更显精致。为 B 站原生提供简易短代码（`{{< bilibili bvid="BVxxx" >}}`），彻底告别大段 HTML 及默认自动播放的烦恼，支持自由传参。
 - **图片优雅灯箱（medium-zoom）**：内置了优雅的图片缩放组件。点击文章内图片即可平滑放大，支持滚轮缩放，背景色自动适配主题。同时拥有智能过滤逻辑：如果图片本身带有超链接（如设置了 `link` 参数的 `figure`），则保持原有跳转功能，不触发灯箱。
 - **静态资源深度本地化**：为了彻底解决国内网络环境下 `cdn.jsdelivr.net` 等服务偶尔无法访问的问题，我们将 `medium-zoom` 和 `giscus-client` 等核心脚本及配套样式全部本地化到了 `assets` 目录中。结合 Hugo 的资源指纹（Fingerprinting）校验，既提升了加载稳定性，又增强了隐私保护。
 - **路径级文件夹密码保护**：结合 Vercel Edge Middleware，实现了开箱即用的特定文件夹（如 `protected`）访问控制。保护区内的文章不仅在列表中强制隐藏摘要，在访问时也会弹出精致的磨砂玻璃风格验证页面；支持“原地解锁”和自定义 Cookie 有效期。
 - **外部链接智能新标签打开**：补充并完善了原版缺失的基础 Markdown 链接渲染钩子。现在只要在文章中插入以 `http` 或 `https` 开头的外网址，访客点击时均会自动带上安全防护属性并在**新标签页**中打开；而本站内部的跳转链接（锚点、站内文章等）则依然保持在当前页跳转，体验舒适加倍。
-- **注重性能与 SEO 优化**：深度精简各类静态化调用流程加载的资源以保持超高标准的响应速度，强化开箱即用的 SEO 基础方案支撑。
 
 ---
 
@@ -113,30 +111,108 @@ jijian 继承了 PaperMod 的简洁、响应式、无依赖等优点，并在此
    ```
    *注意：后续如果修改了文章需要更新搜索结果，需要重新运行第一条命令，再启动 `hugo server`。*
 
-   **场景二：部署并发布到线上生产环境**
-   当你准备将网站正式发布到服务器时，索引只需要生成在最终打包的 `public` 文件夹中即可。
-
-   如果你使用 **GitHub Actions** 自动化部署，你只需在构建脚本的执行步骤中补充一行执行 `npx pagefind` 的指令。**例如在 GitHub Pages 中**：
-   ```yaml
-   - name: Build with Hugo
-     env:
-       HUGO_ENVIRONMENT: production
-       HUGO_ENV: production
-     run: |
-       hugo \
-         --minify \
-         --baseURL "${{ steps.pages.outputs.base_url }}/"
-       # 紧接在 hugo 构建指令之后，加入下面这行即可：
-       npx pagefind --site public
-   ```
-   *云端服务器带有完整的 npm 环境，以上流程能够完美无感生成所需文件。*
-
-   **场景三：使用 Pagefind 自带的服务器预览最终的构建文件**
+   **场景二：使用 Pagefind 自带的服务器预览最终的构建文件**
    如果你已经执行了 `hugo && npx pagefind --site public` 生成了最终要上线的静态文件，并且你想在本地预览这套**完全静态的、脱离了 Hugo 环境的文件**，可以使用：
    ```bash
    npx pagefind --site public --serve
    ```
    *这会在本地启动一个小型的 HTTP 服务器，专门用来预览 `public` 文件夹里的最终成品。*
+
+---
+
+## 首页模式
+
+本主题提供三种首页显示模式，在原 PaperMod 主题基础上重新命名，更加直观易懂：
+
+| jijian 模式 | 原 PaperMod 模式 | 配置键 | 说明 |
+|------------|-----------------|--------|------|
+| **Blog Mode（博客模式）** | Regular Mode | 无特殊键 | 首页直接显示文章列表，适合博客型站点 |
+| **Portal Mode（门户模式）** | Home-Info Mode | `portalMode` | 首页顶部显示自定义信息卡片，下方显示文章列表 |
+| **Card Mode（名片模式）** | Profile Mode | `cardMode` | 首页居中显示个人信息头像、标题和社交图标，无文章列表 |
+
+### 配置示例
+
+**Card Mode（名片模式）：**
+
+```yaml
+params:
+  cardMode:
+    enabled: true
+    title: 你的名字
+    subtitle: Hello! 欢迎来到我的小站...
+    imageUrl: /img/avatar.png
+    imageWidth: 120
+    imageHeight: 120
+    imageTitle: 头像
+    # buttons:  # 可选按钮
+    #   - name: Posts
+    #     url: posts
+```
+
+**Portal Mode（门户模式）：**
+
+```yaml
+params:
+  portalMode:
+    enabled: true
+    Title: 你的名字
+    Content: Hello! 欢迎来到我的小站...
+    AlignSocialIconsTo: center  # 可选：left, center, right
+```
+
+**Blog Mode（博客模式）：**
+
+默认模式，无需特殊配置。如需指定首页显示的内容分区：
+
+```yaml
+params:
+  mainSections:
+    - posts
+```
+
+---
+
+## 代码高亮样式配置
+
+本主题内置了多款 Chroma 语法高亮配色方案，您可以在 `hugo.yaml` 中通过 `params.assets.chromaStyle` 选择喜欢的样式：
+
+```yaml
+params:
+  assets:
+    chromaStyle: catppuccin-macchiato  # 可选值见下表
+```
+
+### 可用样式列表
+
+| 样式名称 | 说明 |
+|---------|------|
+| `catppuccin-macchiato` | 默认样式，与主题配色协调 |
+| `catppuccin-mocha` | Catppuccin 深色变体 |
+| `catppuccin-frappe` | Catppuccin 中等深度 |
+| `catppuccin-latte` | Catppuccin 浅色版本 |
+| `github` | GitHub 浅色风格 |
+| `github-dark` | GitHub 深色风格 |
+| `monokai` | 经典 Monokai 配色 |
+| `dracula` | Dracula 主题配色 |
+| `nord` | Nord 极光配色 |
+| `tokyonight-night` | Tokyo Night 深色 |
+| `gruvbox` | Gruvbox 复古配色 |
+| `onedark` | Atom OneDark 风格 |
+| `solarized-dark` | Solarized 深色 |
+
+> **提示**：如果不配置 `chromaStyle`，主题将默认使用 `catppuccin-macchiato`。
+
+### 其他代码高亮设置
+
+```yaml
+params:
+  ShowCodeCopyButtons: true  # 显示代码复制按钮
+
+markup:
+  highlight:
+    lineNos: true  # 显示行号
+    noClasses: false  # 必须为 false，主题使用 CSS 类名方式
+```
 
 ---
 

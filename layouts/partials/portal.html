@@ -1,4 +1,4 @@
-{{- with site.Params.homeInfoParams }}
+{{- with site.Params.portalMode }}
 <article class="first-entry home-info">
     <header class="entry-header">
         <h1>{{ .Title | markdownify }}</h1>
@@ -7,7 +7,7 @@
         {{ .Content | markdownify }}
     </div>
     <footer class="entry-footer">
-        {{ partial "social_icons.html" (dict "align" site.Params.homeInfoParams.AlignSocialIconsTo) }}
+        {{ partial "social_icons.html" (dict "align" site.Params.portalMode.AlignSocialIconsTo) }}
     </footer>
 </article>
 {{- end -}}

@@ -60,7 +60,11 @@
 {{- $common := (resources.Match "css/common/*.css") | resources.Concat "assets/css/common.css" }}
 
 {{- /* markup.highlight.noClasses should be set to `false` */}}
-{{- $chroma_styles := (resources.Get "css/includes/chroma-styles.css") }}
+{{- $chroma_style := site.Params.assets.chromaStyle | default "catppuccin-macchiato" }}
+{{- $chroma_styles := (resources.Get (printf "css/chroma/%s.css" $chroma_style)) }}
+{{- if not $chroma_styles }}
+{{- $chroma_styles = (resources.Get "css/chroma/catppuccin-macchiato.css") }}
+{{- end }}
 {{- $chroma_mod := (resources.Get "css/includes/chroma-mod.css") }}
 
 {{- /* order is important */}}
@@ -196,6 +200,15 @@
 <script defer crossorigin="anonymous" src="{{ $menu.RelPermalink }}" integrity="{{ $menu.Data.Integrity }}"></script>
 {{- else }}
 <script defer crossorigin="anonymous" src="{{ $menu.RelPermalink }}"></script>
+{{- end }}
+
+{{- /* Social Icons JavaScript */}}
+{{- $socialIcons := resources.Get "js/social-icons.js" | resources.Minify }}
+{{- if not site.Params.assets.disableFingerprinting }}
+{{- $socialIcons := $socialIcons | fingerprint }}
+<script defer crossorigin="anonymous" src="{{ $socialIcons.RelPermalink }}" integrity="{{ $socialIcons.Data.Integrity }}"></script>
+{{- else }}
+<script defer crossorigin="anonymous" src="{{ $socialIcons.RelPermalink }}"></script>
 {{- end }}
 
 {{- partial "extend_head.html" . -}}

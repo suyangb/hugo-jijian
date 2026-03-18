@@ -5,11 +5,13 @@
 }
 
 .footer {
-    max-width: calc(var(--main-width) + var(--gap) * 2);
+    max-width: min(calc(var(--main-width) + var(--gap) * 2), 100vw);
     margin: auto;
     padding: calc((var(--footer-height) - var(--gap)) / 2) var(--gap);
     text-align: center;
     line-height: 24px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .footer span {
@@ -81,4 +83,12 @@
 #theme-toggle:focus,
 .theme-toggle-fixed:focus {
     outline: 0;
+}
+
+/* 移动端固定按钮位置调整 */
+@media (max-width: 768px) {
+    .top-link,
+    .theme-toggle-fixed {
+        right: 15px;
+    }
 }

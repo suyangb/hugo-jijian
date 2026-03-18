@@ -1,8 +1,8 @@
 {{- define "main" }}
 
-{{- if (and site.Params.profileMode.enabled .IsHome) }}
-{{- partial "index_profile.html" . }}
-{{- else }} {{/* if not profileMode */}}
+{{- if (and site.Params.cardMode.enabled .IsHome) }}
+{{- partial "card.html" . }}
+{{- else }} {{/* if not cardMode */}}
 
 {{- if not .IsHome | and .Title }}
 <header class="page-header">
@@ -47,8 +47,8 @@
 
 {{- $paginator := .Paginate $pages }}
 
-{{- if and .IsHome site.Params.homeInfoParams (eq $paginator.PageNumber 1) }}
-{{- partial "home_info.html" . }}
+{{- if and .IsHome site.Params.portalMode (eq $paginator.PageNumber 1) }}
+{{- partial "portal.html" . }}
 {{- end }}
 
 {{- $term := .Data.Term }}
@@ -56,7 +56,7 @@
 
 {{- $class := "post-entry" }}
 
-{{- $user_preferred := or site.Params.disableSpecial1stPost site.Params.homeInfoParams }}
+{{- $user_preferred := or site.Params.disableSpecial1stPost site.Params.portalMode }}
 {{- if (and $.IsHome (eq $paginator.PageNumber 1) (eq $index 0) (not $user_preferred)) }}
 {{- $class = "first-entry" }}
 {{- else if $term }}
@@ -122,6 +122,6 @@
 </footer>
 {{- end }}
 
-{{- end }}{{/* end profileMode */}}
+{{- end }}{{/* end cardMode */}}
 
 {{- end }}{{- /* end main */ -}}

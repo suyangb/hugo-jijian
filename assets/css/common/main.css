@@ -1,9 +1,13 @@
 .main {
     position: relative;
-    min-height: calc(100vh - var(--header-height) - var(--footer-height));
-    max-width: calc(var(--main-width) + var(--gap) * 2);
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    max-width: min(calc(var(--main-width) + var(--gap) * 2), 100vw);
     margin: auto;
     padding: var(--gap);
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .page-header h1 {
@@ -33,14 +37,20 @@
     display: inline-block;
 }
 
-.social-icons a {
+.social-icons a,
+.social-icons .social-icon-no-link {
     display: inline-flex;
     padding: 10px;
 }
 
-.social-icons a svg {
+.social-icons a svg,
+.social-icons .social-icon-no-link svg {
     height: 26px;
     width: 26px;
+}
+
+.social-icons .social-icon-no-link {
+    cursor: default;
 }
 
 .social-icon-hover-image {
@@ -67,6 +77,48 @@
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
+}
+
+/* 移动端固定悬停图片容器 */
+.mobile-hover-image-container {
+    display: none;
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    pointer-events: none;
+}
+
+.mobile-hover-image-container.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.mobile-hover-image-container img {
+    max-width: 280px;
+    max-height: 280px;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* 移动端显示固定悬停图片 */
+@media (max-width: 768px) {
+    .mobile-hover-image-container {
+        display: block;
+        /* 显示在屏幕上方居中，不遮挡社交图标 */
+        top: 20px;
+    }
+    
+    /* 移动端禁用默认的hover效果 */
+    .social-icon-container:hover .social-icon-hover-image {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+    }
 }
 
 code {
