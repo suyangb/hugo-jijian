@@ -1,13 +1,8 @@
 # Hugo jijian（极简）
 
-> **jijian（极简）** 是基于 [PaperMod](https://github.com/adityatelange/hugo-PaperMod) 二次开发的 Hugo 主题。
-> 本主题旨在更简洁、极致高效的基础上，保留 PaperMod 的优秀特性，并针对中文用户和个人需求做了大量优化和定制。
-
----
-
 ## 主题简介
 
-jijian 继承了 PaperMod 的简洁、响应式、无依赖等优点，并在此基础上进行了如下改进和个性化调整：
+jijian（极简） 继承了 [PaperMod](https://github.com/adityatelange/hugo-PaperMod) 的简洁、响应式、无依赖等优点，并在此基础上进行了如下改进和个性化调整：
 
 - **可视化配置工具**：提供开箱即用的 `config-tools.html` 配置工具，支持所有主题配置项的可视化设置、实时预览生成的 YAML 配置、自动处理配置项之间的依赖关系，以及一键生成 `hugo.yaml`、`package.json`、`middleware.js` 文件。
 - **完美的中文统计体验**：彻底重构了 Hugo 与 PaperMod 原本对中文极不友好的字数统计逻辑。内置精确的正则分离算法，精准识别并统计汉字、字母和数字；基于精准字数计算出更合理的阅读时长（支持在 `hugo.yaml` 中配置 `readingSpeed` 设定个人阅读速度）。
@@ -124,11 +119,11 @@ jijian 继承了 PaperMod 的简洁、响应式、无依赖等优点，并在此
 
 本主题提供三种首页显示模式，在原 PaperMod 主题基础上重新命名，更加直观易懂：
 
-| jijian 模式 | 原 PaperMod 模式 | 配置键 | 说明 |
-|------------|-----------------|--------|------|
-| **Blog Mode（博客模式）** | Regular Mode | 无特殊键 | 首页直接显示文章列表，适合博客型站点 |
-| **Portal Mode（门户模式）** | Home-Info Mode | `portalMode` | 首页顶部显示自定义信息卡片，下方显示文章列表 |
-| **Card Mode（名片模式）** | Profile Mode | `cardMode` | 首页居中显示个人信息头像、标题和社交图标，无文章列表 |
+| jijian 模式 | 备注 | 原 PaperMod 模式 | 配置键 | 说明 |
+|------------|------|-----------------|--------|------|
+| **Blog Mode** | 博客模式 | Regular Mode | 无特殊键 | 首页直接显示文章列表，适合博客型站点 |
+| **Portal Mode** | 门户模式 | Home-Info Mode | `portalMode` | 首页顶部显示自定义信息卡片，下方显示文章列表 |
+| **Card Mode** | 名片模式 | Profile Mode | `cardMode` | 首页居中显示个人信息头像、标题和社交图标，无文章列表 |
 
 ### 配置示例
 
