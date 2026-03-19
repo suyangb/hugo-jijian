@@ -1438,6 +1438,12 @@
                                     class="config-key">(params.giscus.categoryId)</span></label>
                             <input type="text" id="giscusCategoryId" placeholder="your-category-id">
                         </div>
+                        <div class="form-group">
+                            <label for="giscusLang">语言代码 <span
+                                    class="config-key">(params.giscus.lang)</span></label>
+                            <input type="text" id="giscusLang" placeholder="zh-CN, en, ja 等（注意大小写）">
+                            <small class="hint">必须 https://giscus.app/ 该网站中给出的代码中的语言一致，注意大小写</small>
+                        </div>
                     </div>
 
                 </div>
@@ -2502,13 +2508,15 @@
                 const giscusRepoId = getValue('giscusRepoId');
                 const giscusCategory = getValue('giscusCategory');
                 const giscusCategoryId = getValue('giscusCategoryId');
+                const giscusLang = getValue('giscusLang');
 
-                if (giscusRepo || giscusRepoId || giscusCategory || giscusCategoryId) {
+                if (giscusRepo || giscusRepoId || giscusCategory || giscusCategoryId || giscusLang) {
                     yaml += `  giscus:\n`;
                     if (giscusRepo) yaml += `    repo: "${giscusRepo}"\n`;
                     if (giscusRepoId) yaml += `    repoId: "${giscusRepoId}"\n`;
                     if (giscusCategory) yaml += `    category: "${giscusCategory}"\n`;
                     if (giscusCategoryId) yaml += `    categoryId: "${giscusCategoryId}"\n`;
+                    if (giscusLang) yaml += `    lang: "${giscusLang}"\n`;
                 }
             }
 
@@ -2896,7 +2904,7 @@ export default function middleware(req) {
                 // 其他高级设置
                 'showReadingTime', 'showWordCount', 'showShareButtons',
                 'showPostNavLinks', 'disableScrollToTop',
-                'comments', 'giscusRepo', 'giscusRepoId', 'giscusCategory', 'giscusCategoryId',
+                'comments', 'giscusRepo', 'giscusRepoId', 'giscusCategory', 'giscusCategoryId', 'giscusLang',
                 // 代码高亮
                 'chromaStyle', 'showCodeCopyButtons', 'lineNos',
                 // 输出设置

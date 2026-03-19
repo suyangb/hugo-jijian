@@ -97,10 +97,11 @@ setTimeout(function() {
         data-mapping="pathname"
         data-strict="0"
         data-reactions-enabled="1"
-        data-emit-metadata="1"
-        data-input-position="bottom"
+        data-emit-metadata="0"
+        data-input-position="top"
         data-theme="preferred_color_scheme"
-        data-lang="{{ .Site.Language.Lang }}"
+        data-lang="{{ .Site.Params.giscus.lang | default .Site.Language.Lang }}"
+        data-loading="lazy"
         crossorigin="anonymous"
         async>
 </script>
