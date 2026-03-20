@@ -1622,7 +1622,7 @@
                 </div>
 
                 <div class="form-section" id="middlewareSection" style="display: none;">
-                    <h2>middleware.js（基于vercel的密码保护）</h2>
+                    <h2>middleware.js（多平台部署密码保护）</h2>
                     <p class="section-hint">配置受保护文章的路径和访问密码</p>
                     <div id="passwordMapContainer">
                         <div class="password-entry" data-index="0">
@@ -2669,56 +2669,81 @@
                 const path = entry.querySelector('.password-path').value.trim().toLowerCase();
                 const password = entry.querySelector('.password-value').value.trim();
                 if (path && password) {
-                    passwordMapContent += `  '${path}': '${password}',\n`;
+                    passwordMapContent += `    '${path}': '${password}',\n`;
                 }
             });
 
-            return `import { next, rewrite } from '@vercel/edge';
-
-const PASSWORDS_MAP = {
-${passwordMapContent}};
+            return `import { next as vercelNext, rewrite as vercelRewrite } from '@vercel/edge';
 
 export const config = {
-  matcher: '/posts/protected/:path*',
+  matcher: ['/posts/protected/:path*'],
 };
 
-export default function middleware(req) {
-  const url = new URL(req.url);
+/**
+ * 通用中间件逻辑：兼容腾讯云 EdgeOne 和 Vercel
+ */
+export async function middleware(arg) {
+  // 1. 环境特征检测
+  // EdgeOne 传入 context 对象，包含 request, next, rewrite, env
+  // Vercel 传入 Request 对象 (NextRequest)
+  const isEdgeOne = arg && arg.request && typeof arg.next === 'function';
+  
+  const request = isEdgeOne ? arg.request : arg;
+  const env = isEdgeOne ? arg.env : (typeof process !== 'undefined' ? process.env : {});
+  
+  // 核心操作函数封装
+  const nextFn = isEdgeOne ? (options) => arg.next(options) : (options) => vercelNext(options);
+  const rewriteFn = isEdgeOne ? (url) => arg.rewrite(url) : (url) => vercelRewrite(url);
+
+  // --- 核心业务逻辑 ---
+  const url = new URL(request.url);
   const decodedPath = decodeURIComponent(url.pathname).toLowerCase();
   const path = decodedPath.endsWith('/') ? decodedPath : \`\${decodedPath}/\`;
-  const cookies = req.headers.get('cookie') || '';
+  const cookies = request.headers.get('cookie') || '';
   
-  const safePath = btoa(unescape(encodeURIComponent(path))).replace(/[=/+]/g, '');
+  // 路径 Token 生成
+  // 使用 encodeURIComponent + unescape 的代替逻辑处理中文路径兼容性
+  const safePath = btoa(encodeURIComponent(path).replace(/%([0-9A-F]{2})/g, (match, p1) => String.fromCharCode('0x' + p1))).replace(/[=/+]/g, '');
   const pathToken = safePath.substring(0, 16);
   const authCookieName = \`auth_\${pathToken}\`;
 
+  // 1. 检查已授权
   if (cookies.includes(\`\${authCookieName}=true\`)) {
-    return next();
+    return await nextFn();
   }
 
-  const tempPass = cookies.split(';').find(c => c.trim().startsWith('check_pw='))?.split('=')[1];
-  const decodedPass = tempPass ? decodeURIComponent(tempPass) : null;
+  // 2. 检查临时提交的密码
+  const tempPassMatch = cookies.match(/check_pw=([^;]+)/);
+  const tempPass = tempPassMatch ? decodeURIComponent(tempPassMatch[1]) : null;
+
+  const PASSWORDS_MAP = {
+\${passwordMapContent}  };
   const expectedPass = PASSWORDS_MAP[path];
 
-  if (decodedPass && expectedPass && decodedPass === expectedPass) {
-    const duration = process.env.AUTH_DURATION || '86400';
-    const response = next();
+  // 3. 验证逻辑
+  if (tempPass && expectedPass && tempPass === expectedPass) {
+    const duration = env.AUTH_DURATION || '86400';
+    const response = await nextFn();
     response.headers.append('Set-Cookie', \`\${authCookieName}=true; Path=/; Max-Age=\${duration}; HttpOnly; SameSite=Lax\`);
     response.headers.append('Set-Cookie', \`check_pw=; Path=/; Max-Age=0\`);
     return response;
   }
 
-  const passwordUrl = new URL('/password/', req.url);
+  // 4. 重写到密码页
+  const passwordUrl = new URL('/password/', request.url);
   passwordUrl.searchParams.set('next', url.pathname);
   
-  const response = rewrite(passwordUrl);
+  const response = await rewriteFn(passwordUrl.toString());
 
-  if (decodedPass && decodedPass !== expectedPass) {
+  if (tempPass && tempPass !== expectedPass) {
     response.headers.append('Set-Cookie', \`pw_error=1; Path=/; Max-Age=30; SameSite=Lax\`);
   }
   
   return response;
 }
+
+// Vercel 依赖默认导出 (default export)
+export default middleware;
 `;
         }
 
