@@ -87,8 +87,12 @@
 
 /* 移动端固定按钮位置调整 */
 @media (max-width: 768px) {
-    .top-link,
+    .top-link {
+        right: 15px;
+        bottom: 70px;
+    }
     .theme-toggle-fixed {
         right: 15px;
+        bottom: 125px;
     }
 }

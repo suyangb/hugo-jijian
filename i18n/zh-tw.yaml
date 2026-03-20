@@ -53,3 +53,6 @@
 
 - id: comments_retry
   translation: "重新載入"
+
+- id: protected_summary
+  translation: "這篇文章有受限訪問保護，摘要已隱藏。"

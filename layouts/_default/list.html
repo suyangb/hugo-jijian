@@ -85,9 +85,9 @@
       {{- end }}
     </h2>
   </header>
-  {{- if and (ne (.Param "hideSummary") true) (not (in .File.Path "protected")) }}
+  {{- if ne (.Param "hideSummary") true }}
   <div class="entry-content">
-    <p>{{ .Summary | plainify | htmlUnescape }}{{ if .Truncated }}...{{ end }}</p>
+    <p>{{ if in .File.Path "protected" }}{{ i18n "protected_summary" }}{{ else }}{{ .Summary | plainify | htmlUnescape }}{{ if .Truncated }}...{{ end }}{{ end }}</p>
   </div>
   {{- end }}
   {{- if not (.Param "hideMeta") }}

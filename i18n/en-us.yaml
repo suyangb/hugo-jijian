@@ -53,3 +53,6 @@
 
 - id: comments_retry
   translation: "Retry"
+
+- id: protected_summary
+  translation: "This post is access-restricted, summary hidden."

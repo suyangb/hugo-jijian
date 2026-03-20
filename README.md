@@ -4,7 +4,7 @@
 
 ## 特性概览
 
-- **可视化配置工具** — 开箱即用的 `config-tools.html`
+- **可视化配置工具** — 开箱即用的 `极简（jijian）主题-config-tools.html`
 - **完美的中文统计** — 精准识别汉字、字母和数字
 - **Pagefind 搜索** — 高性能静态搜索引擎
 - **路径级密码保护** — 结合 Vercel Edge Middleware
