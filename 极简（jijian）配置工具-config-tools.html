@@ -842,9 +842,13 @@
         <div class="header-content">
             <div class="title-container">
                 <h1>HUGO主题-极简（Jijian）yaml配置工具</h1>
-                <a href="https://github.com/hcllmsx/hugo-jijian" target="_blank" rel="noopener noreferrer" class="github-link" title="Visit Jijian Theme on GitHub">
-                    <svg height="28" viewBox="0 0 16 16" version="1.1" width="28" aria-hidden="true" fill="currentColor">
-                        <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+                <a href="https://github.com/hcllmsx/hugo-jijian" target="_blank" rel="noopener noreferrer"
+                    class="github-link" title="Visit Jijian Theme on GitHub">
+                    <svg height="28" viewBox="0 0 16 16" version="1.1" width="28" aria-hidden="true"
+                        fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z">
+                        </path>
                     </svg>
                 </a>
             </div>
@@ -1389,9 +1393,11 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="shareButtons">分享按钮列表（逗号分隔） <span class="config-key">(params.ShareButtons)</span></label>
+                        <label for="shareButtons">分享按钮列表（逗号分隔） <span
+                                class="config-key">(params.ShareButtons)</span></label>
                         <input type="text" id="shareButtons" placeholder="weibo, qq, qzone, douban, tieba, copylink">
-                        <small class="hint">国内：weibo, qq, qzone, douban, tieba, copylink | 国外：x, linkedin, reddit, facebook, whatsapp, telegram, ycombinator</small>
+                        <small class="hint">国内：weibo, qq, qzone, douban, tieba, copylink | 国外：x, linkedin, reddit,
+                            facebook, whatsapp, telegram, ycombinator</small>
                         <small class="hint">注：不配置时，中文站默认显示国内平台，其他语言默认显示国外平台</small>
                     </div>
 
@@ -1439,8 +1445,7 @@
                             <input type="text" id="giscusCategoryId" placeholder="your-category-id">
                         </div>
                         <div class="form-group">
-                            <label for="giscusLang">语言代码 <span
-                                    class="config-key">(params.giscus.lang)</span></label>
+                            <label for="giscusLang">语言代码 <span class="config-key">(params.giscus.lang)</span></label>
                             <input type="text" id="giscusLang" placeholder="zh-CN, en, ja 等（注意大小写）">
                             <small class="hint">必须 https://giscus.app/ 该网站中给出的代码中的语言一致，注意大小写</small>
                         </div>
@@ -1457,8 +1462,7 @@
                         <small class="hint">默认 3600 (1小时)，0 表示仅限本次访问（不持久化）。此设置仅对本地加密文章生效。</small>
                     </div>
                     <div class="form-group">
-                        <label for="authTip">解密页面提示语 <span
-                                class="config-key">(params.authTip)</span></label>
+                        <label for="authTip">解密页面提示语 <span class="config-key">(params.authTip)</span></label>
                         <input type="text" id="authTip" placeholder="请输入访问密码以解锁内容">
                         <small class="hint">留空则使用系统默认多语言翻译。可自定义为“如需密码，请联系作者”等。</small>
                     </div>
@@ -1619,25 +1623,25 @@
                     <p class="info-text">ES 模块已启用 <span class="config-key">(type: "module")</span> — 支持 import/export 语法
                     </p>
 
-                        <div class="form-group">
-                            <label for="pagefindVersion">pagefind <span class="hint-text">— 全文搜索依赖</span></label>
-                            <input type="text" id="pagefindVersion" value="^1.4.0" placeholder="版本号">
+                    <div class="form-group">
+                        <label for="pagefindVersion">pagefind <span class="hint-text">— 全文搜索依赖</span></label>
+                        <input type="text" id="pagefindVersion" value="^1.4.0" placeholder="版本号">
+                    </div>
+                    <div class="form-group">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="depEdgeOne" onchange="toggleEdgeOneSettings()">
+                            <label for="depEdgeOne">部署在腾讯 EdgeOne Pages</label>
                         </div>
-                        <div class="form-group">
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="depEdgeOne" onchange="toggleEdgeOneSettings()">
-                                <label for="depEdgeOne">部署在腾讯 EdgeOne Pages</label>
-                            </div>
-                            <div id="edgeoneSettings" style="display: none; margin-top: 8px;">
-                                <label for="hugoVersion">Hugo 版本号 (如 0.158.0)</label>
-                                <input type="text" id="hugoVersion" value="0.158.0" placeholder="0.158.0">
-                                <p class="hint-text">自动生成下载安装指令</p>
-                            </div>
+                        <div id="edgeoneSettings" style="display: none; margin-top: 8px;">
+                            <label for="hugoVersion">Hugo 版本号 (如 0.158.0)</label>
+                            <input type="text" id="hugoVersion" value="0.158.0" placeholder="0.158.0">
+                            <p class="hint-text">自动生成下载安装指令</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 
     <div class="footer">
@@ -1649,7 +1653,8 @@
             <button class="preview-btn" onclick="previewConfig()">预览</button>
             <button class="primary" onclick="exportHugoYaml()">导出 hugo.yaml</button>
             <button class="primary" onclick="exportPackageJson()">导出 package.json</button>
-            <button class="primary" id="exportEdgeOneBtn" onclick="exportEdgeOneJson()" style="display: none;">导出 edgeone.json</button>
+            <button class="primary" id="exportEdgeOneBtn" onclick="exportEdgeOneJson()" style="display: none;">导出
+                edgeone.json</button>
             <input type="file" id="snapshotInput" accept=".ssjson,.json,.yaml,.yml,.js" style="display: none;"
                 onchange="loadSnapshot(this)">
         </div>
@@ -2774,11 +2779,11 @@ export default middleware;
         function generateEdgeOneJson() {
             const version = document.getElementById('hugoVersion')?.value || '0.158.0';
             const name = document.getElementById('packageName')?.value || '';
-            
+
             const edgeoneData = {
                 "name": name,
                 "installCommand": `curl -L -o hugo.tar.gz https://github.com/gohugoio/hugo/releases/download/v${version}/hugo_extended_${version}_linux-amd64.tar.gz && tar -xzf hugo.tar.gz && npm install`,
-                "buildCommand": "npm run build",
+                "buildCommand": "PATH=$PATH:. npm run build",
                 "outputDirectory": "public"
             };
 
@@ -3784,14 +3789,14 @@ export default middleware;
                     const packageNameEl = document.getElementById('packageName');
                     if (packageNameEl) packageNameEl.value = data.name;
                 }
-                
+
                 // 解析并同步版本号
                 if (data.installCommand) {
                     const match = data.installCommand.match(/download\/v([^\/]+)\/hugo/);
                     if (match && match[1]) {
                         const hugoVersionEl = document.getElementById('hugoVersion');
                         if (hugoVersionEl) hugoVersionEl.value = match[1];
-                        
+
                         const depEdgeOneEl = document.getElementById('depEdgeOne');
                         if (depEdgeOneEl) {
                             depEdgeOneEl.checked = true;
@@ -3832,7 +3837,7 @@ export default middleware;
             exportBtn.style.display = isChecked ? 'inline-block' : 'none';
             if (edgeoneTab) {
                 edgeoneTab.style.display = isChecked ? 'inline-block' : 'none';
-                
+
                 // 如果当前选中的就是 edgeone-json 标签页，且被隐藏了，则切回 hugo-yaml
                 if (!isChecked && edgeoneTab.classList.contains('active')) {
                     const hugoTab = document.querySelector('.preview-tab[data-preview="hugo-yaml"]');
