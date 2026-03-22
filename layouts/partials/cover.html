@@ -1,6 +1,17 @@
 {{- with .cxt}} {{/* Apply proper context from dict */}}
-{{- $coverImage := .Params.cover.image | default site.Params.defaultImage }}
-{{- if (and $coverImage (not $.isHidden)) }}
+{{- $coverImage := .Params.cover.image }}
+{{- $isDefault := false }}
+{{- if not $coverImage }}
+    {{- $coverImage = site.Params.defaultImage }}
+    {{- $isDefault = true }}
+{{- end }}
+
+{{- $displayCover := and $coverImage (not $.isHidden) }}
+{{- if (and $isDefault (not site.Params.cover.displayDefault)) }}
+    {{- $displayCover = false }}
+{{- end }}
+
+{{- if $displayCover }}
 <figure class="entry-cover">
     {{- $loading := cond $.IsSingle "eager" "lazy" }}
     {{- $addLink := (and site.Params.cover.linkFullImages $.IsSingle) }}

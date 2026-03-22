@@ -1055,7 +1055,16 @@
                             <button type="button" class="path-fix-btn"
                                 onclick="fixStaticPath(this.previousElementSibling)">纠正</button>
                         </div>
-                        <p style="color: #666; font-size: 0.85em; margin-top: 5px;">当文章未设置 cover.image 时，自动在列表预览和文章顶部显示的封面图</p>
+                        <p style="color: #666; font-size: 0.85em; margin-top: 5px;">当文章未设置 cover.image 时，在列表悬停或搜索预览中显示的保底图。</p>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="coverDisplayDefault">
+                            <label for="coverDisplayDefault">在文章顶部显示默认封面图 <span
+                                    class="config-key">(params.cover.displayDefault)</span></label>
+                        </div>
+                        <p style="color: #666; font-size: 0.85em; margin-top: 5px;">开启后，即便文章未设置封面图，也会在顶部显示保底图。关闭则仅在列表悬浮或搜索预览中显示。</p>
                     </div>
                 </div>
 
@@ -2411,6 +2420,11 @@
             if (defaultImage) {
                 yaml += `  defaultImage: "${defaultImage}"\n`;
             }
+
+            if (document.getElementById('coverDisplayDefault').checked) {
+                yaml += `  cover:\n`;
+                yaml += `    displayDefault: true\n`;
+            }
             yaml += '\n';
 
             const homeMode = document.getElementById('homeMode').value;
@@ -3294,6 +3308,8 @@ export default middleware;
             let inFooter = false;
             let inShareButtons = false;
             let inMainSections = false;
+            let inCode = false;
+            let inCover = false;
             let currentSocialIcon = null;
             let currentCardButton = null;
             let cardModeEnabled = false;
@@ -3323,6 +3339,8 @@ export default middleware;
                     inFooter = false;
                     inShareButtons = false;
                     inMainSections = false;
+                    inCode = false;
+                    inCover = false;
                 }
 
                 if (inParams) {
@@ -3335,6 +3353,8 @@ export default middleware;
                         inPortalMode = false;
                         inFooter = false;
                         inShareButtons = false;
+                        inCode = false;
+                        inCover = false;
 
                         if (trimmed.startsWith('description:')) {
                             config.hugoYaml.description = trimmed.substring('description:'.length).trim();
@@ -3376,6 +3396,10 @@ export default middleware;
                         } else if (trimmed === 'mainSections:') {
                             inMainSections = true;
                             config.hugoYaml.mainSectionsArr = [];
+                        } else if (trimmed === 'code:') {
+                            inCode = true;
+                        } else if (trimmed === 'cover:') {
+                            inCover = true;
                         } else if (trimmed.startsWith('comments:')) {
                             config.hugoYaml.comments = trimmed.includes('true');
                         } else if (trimmed.startsWith('showtoc:') || trimmed.startsWith('Showtoc:')) {
@@ -3398,10 +3422,6 @@ export default middleware;
                             config.hugoYaml.hideSummary = trimmed.includes('true');
                         } else if (trimmed.startsWith('ShowShareButtons:')) {
                             config.hugoYaml.showShareButtons = trimmed.includes('true');
-                        } else if (trimmed.startsWith('showCopyButtons:')) {
-                            config.hugoYaml.showCodeCopyButtons = trimmed.includes('true');
-                        } else if (trimmed.startsWith('chromaStyle:')) {
-                            config.hugoYaml.chromaStyle = trimmed.substring('chromaStyle:'.length).trim().replace(/['"]/g, '');
                         } else if (trimmed.startsWith('ShowRssButtonInSectionTermList:')) {
                             config.hugoYaml.showRssButtonInSectionTermList = trimmed.includes('true');
                         } else if (trimmed.startsWith('ShowBreadCrumbs:')) {
@@ -3419,8 +3439,8 @@ export default middleware;
                         } else if (trimmed.startsWith('disableScrollToTop:')) {
                             config.hugoYaml.disableScrollToTop = trimmed.includes('true');
                         } else if (trimmed.startsWith('disableThemeToggle:')) {
-                            config.hugoYaml.disableThemeToggle = trimmed.includes('true');
-                        } else if (trimmed.startsWith('hidemeta:')) {
+                             config.hugoYaml.disableThemeToggle = trimmed.includes('true');
+                         } else if (trimmed.startsWith('hidemeta:')) {
                             config.hugoYaml.hidemeta = trimmed.includes('true');
                         } else if (trimmed.startsWith('authDuration:')) {
                             config.hugoYaml.authDuration = trimmed.substring('authDuration:'.length).trim();
@@ -3562,6 +3582,22 @@ export default middleware;
                             config.hugoYaml.giscusCategoryId = cleanValue(trimmed, 'categoryId:');
                         } else if (trimmed.startsWith('lang:')) {
                             config.hugoYaml.giscusLang = cleanValue(trimmed, 'lang:');
+                        }
+                    }
+
+                    // code 内字段
+                    if (inCode && indent === 4) {
+                        if (trimmed.startsWith('showCopyButtons:')) {
+                            config.hugoYaml.showCodeCopyButtons = trimmed.includes('true');
+                        } else if (trimmed.startsWith('chromaStyle:')) {
+                            config.hugoYaml.chromaStyle = trimmed.substring('chromaStyle:'.length).trim().replace(/['"]/g, '');
+                        }
+                    }
+
+                    // cover 内字段
+                    if (inCover && indent === 4) {
+                        if (trimmed.startsWith('displayDefault:')) {
+                            config.hugoYaml.coverDisplayDefault = trimmed.includes('true');
                         }
                     }
                 }
