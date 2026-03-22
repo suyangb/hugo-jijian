@@ -158,7 +158,14 @@
 </script>
 {{- end }}
 
-{{- if (and (eq .Kind "page") (ne .Layout "archives") (ne .Layout "search") (.Param "ShowCodeCopyButtons")) }}
+{{- $showCopyButtons := true }}
+{{- if isset site.Params "code" }}
+  {{- $showCopyButtons = site.Params.code.showCopyButtons | default true }}
+{{- end }}
+{{- if isset .Params "code" }}
+  {{- $showCopyButtons = .Params.code.showCopyButtons | default true }}
+{{- end }}
+{{- if (and (eq .Kind "page") (ne .Layout "archives") (ne .Layout "search") $showCopyButtons) }}
 <script>
     document.querySelectorAll('pre > code').forEach((codeblock) => {
         const container = codeblock.parentNode.parentNode;

@@ -23,6 +23,14 @@
         margin-top: 20px;
     }
 
+    /* meta-date adaptation */
+    .long-date {
+        display: none !important;
+    }
+    .short-date {
+        display: inline !important;
+    }
+
     /* footer */
     .footer {
         padding: calc((var(--footer-height) - var(--gap) - 10px) / 2) var(--gap);

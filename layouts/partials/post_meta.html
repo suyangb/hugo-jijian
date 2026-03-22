@@ -1,19 +1,31 @@
 {{- $scratch := newScratch }}
+{{- $page := . -}}
+{{- $is_list := false -}}
+{{- if reflect.IsMap . -}}
+  {{- $page = .page -}}
+  {{- $is_list = .is_list -}}
+{{- end -}}
 
-{{- if not .Date.IsZero -}}
-{{- $hoverDate := .Date -}}
+{{- if not $page.Date.IsZero -}}
+{{- $hoverDate := $page.Date -}}
 {{- $dateFormat := default ":date_long" site.Params.DateFormat -}}
 {{- $hasTime := or (in $dateFormat "15") (in $dateFormat "03") -}}
 {{- $hoverFormatId := cond $hasTime "hover_date_format" "hover_date_format_no_time" -}}
 {{- $hoverFormat := i18n $hoverFormatId -}}
 {{- if $hoverFormat -}}
-  {{- $hoverDate = .Date.Format $hoverFormat -}}
+  {{- $hoverDate = $page.Date.Format $hoverFormat -}}
 {{- end -}}
-{{- $scratch.Add "meta" (slice (printf "<span title='%s'>%s</span>" $hoverDate (.Date | time.Format $dateFormat))) }}
+
+{{- $dateHtml := $page.Date | time.Format $dateFormat -}}
+{{- if $is_list -}}
+  {{- /* 列表页输出长短两种格式，交由 CSS 在手机端自适应切换断点 */ -}}
+  {{- $dateHtml = printf "<span class='long-date'>%s</span><span class='short-date' style='display:none;'>%s</span>" ($page.Date | time.Format $dateFormat) ($page.Date | time.Format "2006-01-02") -}}
+{{- end -}}
+{{- $scratch.Add "meta" (slice (printf "<span title='%s'>%s</span>" $hoverDate $dateHtml)) }}
 {{- end }}
 
-{{- if or (.Param "ShowReadingTime") (.Param "ShowWordCount") -}}
-{{- $content := replaceRE "\\s+" "" (.Content | plainify | htmlUnescape) -}}
+{{- if or ($page.Param "ShowReadingTime") ($page.Param "ShowWordCount") -}}
+{{- $content := replaceRE "\\s+" "" ($page.Content | plainify | htmlUnescape) -}}
 {{- $iTotal := strings.RuneCount (replaceRE "[^\\x{4e00}-\\x{9fa5}]" "" $content) -}}
 {{- $inum := strings.RuneCount (replaceRE "[^0-9]" "" $content) -}}
 {{- $eTotal := strings.RuneCount (replaceRE "[^\\x00-\\xff]" "" $content) -}}
@@ -22,14 +34,14 @@
 {{- $biaodian := sub $sTotal $iTotal -}}
 {{- $zimu := sub $eTotal $inum -}}
 
-{{- if (.Param "ShowReadingTime") -}}
+{{- if ($page.Param "ShowReadingTime") -}}
 {{- $speed := site.Params.readingSpeed | default 200.0 | float -}}
 {{- $readTime := math.Ceil (div $zishu $speed) | int -}}
 {{- $scratch.Add "meta" (slice (printf "<span>%s</span>" (i18n "read_time" $readTime | default (printf "%d min"
 $readTime)))) }}
 {{- end }}
 
-{{- if (.Param "ShowWordCount") -}}
+{{- if ($page.Param "ShowWordCount") -}}
 {{- $title := printf (i18n "word_count_title" | default "包含：%d个汉字，%d个标点(全角)，%d个字母(半角)，%d个数字") $iTotal $biaodian $zimu
 $inum -}}
 {{- $wordCountStr := i18n "words" $zishu | default (printf "%d字" $zishu) -}}
@@ -38,8 +50,8 @@ $inum -}}
 
 {{- end }}
 
-{{- if not (.Param "hideAuthor") -}}
-{{- with (partial "author.html" .) }}
+{{- if not ($page.Param "hideAuthor") -}}
+{{- with (partial "author.html" $page) }}
 {{- $scratch.Add "meta" (slice (printf "<span>%s</span>" .)) }}
 {{- end }}
 {{- end }}

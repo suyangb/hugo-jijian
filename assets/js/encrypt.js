@@ -164,6 +164,15 @@ function processFile(filePath) {
         oldScript.parentNode.replaceChild(newScript, oldScript);
       });
 
+      // 联动修改真实的 Title B
+      const realTitleEl = document.getElementById('real-title');
+      if (realTitleEl && realTitleEl.innerText) {
+        const titleTextEl = document.querySelector('.post-title-text');
+        if (titleTextEl) {
+          titleTextEl.innerText = realTitleEl.innerText;
+        }
+      }
+
       // 联动显示 TOC 和 Description
       const toc = document.querySelector('.toc, #toc, .post-toc');
       if (toc) toc.style.display = 'block';

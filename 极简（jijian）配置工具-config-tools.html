@@ -1039,13 +1039,23 @@
                         <input type="number" id="labelIconHeight" value="32" placeholder="图标高度，单位px无需填写">
                     </div>
                     <div class="form-group">
-                        <label for="defaultImage">默认分享图片 <span class="config-key">(params.images)</span></label>
+                        <label for="shareImages">默认分享图片 <span class="config-key">(params.shareImages)</span></label>
                         <div class="path-input-wrapper">
-                            <input type="text" id="defaultImage" placeholder="社交媒体分享时显示的默认图片路径">
+                            <input type="text" id="shareImages" placeholder="社交媒体分享时显示的默认图片路径">
                             <button type="button" class="path-fix-btn"
                                 onclick="fixStaticPath(this.previousElementSibling)">纠正</button>
                         </div>
-                        <p style="color: #666; font-size: 0.85em; margin-top: 5px;">用于 Open Graph / 社交平台分享链接时显示的默认图片</p>
+                        <p style="color: #666; font-size: 0.85em; margin-top: 5px;">用于 Open Graph / 社交平台分享链接时显示的默认图片 (分享预览图)</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="defaultImage">文章默认封面图 <span class="config-key">(params.defaultImage)</span></label>
+                        <div class="path-input-wrapper">
+                            <input type="text" id="defaultImage" placeholder="文章没有手动指定封面图时的保底图路径">
+                            <button type="button" class="path-fix-btn"
+                                onclick="fixStaticPath(this.previousElementSibling)">纠正</button>
+                        </div>
+                        <p style="color: #666; font-size: 0.85em; margin-top: 5px;">当文章未设置 cover.image 时，自动在列表预览和文章顶部显示的封面图</p>
                     </div>
                 </div>
 
@@ -1472,7 +1482,7 @@
                     <h2>代码高亮设置</h2>
                     <div class="form-group">
                         <label for="chromaStyle">代码高亮样式 <span
-                                class="config-key">(params.assets.chromaStyle)</span></label>
+                                class="config-key">(params.code.chromaStyle)</span></label>
                         <select id="chromaStyle">
                             <optgroup label="Catppuccin 系列（推荐）">
                                 <option value="catppuccin-macchiato" selected>Catppuccin Macchiato（默认）</option>
@@ -1501,7 +1511,7 @@
                         <div class="checkbox-group">
                             <input type="checkbox" id="showCodeCopyButtons" checked>
                             <label for="showCodeCopyButtons">显示代码复制按钮 <span
-                                    class="config-key">(params.ShowCodeCopyButtons)</span></label>
+                                    class="config-key">(params.code.showCopyButtons)</span></label>
                         </div>
                     </div>
 
@@ -1511,11 +1521,6 @@
                             <label for="lineNos">显示行号 <span class="config-key">(markup.highlight.lineNos)</span></label>
                         </div>
                     </div>
-
-                    <p style="color: #666; font-size: 0.85em; margin-top: 10px;">
-                        <strong>说明：</strong>代码高亮使用 CSS 类名方式（pygmentsUseClasses: true, noClasses:
-                        false），这是主题要求的固定配置，确保主题能正确加载上方选择的配色样式。
-                    </p>
                 </div>
 
                 <div class="form-section">
@@ -2374,16 +2379,13 @@
             const chromaStyle = document.getElementById('chromaStyle').value;
             const hasChromaStyle = chromaStyle && chromaStyle !== 'catppuccin-macchiato';
 
-            if (favicon || favicon16 || favicon32 || appleIcon || safariTab || hasChromaStyle) {
+            if (favicon || favicon16 || favicon32 || appleIcon || safariTab) {
                 yaml += `  assets:\n`;
                 yaml = addFieldBlock(yaml, '    ', 'favicon', favicon);
                 yaml = addFieldBlock(yaml, '    ', 'favicon16x16', favicon16);
                 yaml = addFieldBlock(yaml, '    ', 'favicon32x32', favicon32);
                 yaml = addFieldBlock(yaml, '    ', 'apple_touch_icon', appleIcon);
                 yaml = addFieldBlock(yaml, '    ', 'safari_pinned_tab', safariTab);
-                if (hasChromaStyle) {
-                    yaml = addFieldBlock(yaml, '    ', 'chromaStyle', chromaStyle);
-                }
                 yaml += '\n';
             }
 
@@ -2400,10 +2402,16 @@
                 yaml += '\n';
             }
 
+            const shareImages = getValue('shareImages');
+            if (shareImages) {
+                yaml += `  shareImages: ["${shareImages}"]\n`;
+            }
+
             const defaultImage = getValue('defaultImage');
             if (defaultImage) {
-                yaml += `  images: ["${defaultImage}"]\n\n`;
+                yaml += `  defaultImage: "${defaultImage}"\n`;
             }
+            yaml += '\n';
 
             const homeMode = document.getElementById('homeMode').value;
 
@@ -2552,7 +2560,11 @@
                 }
             }
 
-            yaml += `  ShowCodeCopyButtons: ${document.getElementById('showCodeCopyButtons').checked}\n`;
+            yaml += `  code:\n`;
+            if (hasChromaStyle) {
+                yaml = addFieldBlock(yaml, '    ', 'chromaStyle', chromaStyle);
+            }
+            yaml += `    showCopyButtons: ${document.getElementById('showCodeCopyButtons').checked}\n`;
             yaml += `  ShowRssButtonInSectionTermList: ${document.getElementById('showRssButtonInSectionTermList').checked}\n`;
             yaml += `  ShowBreadCrumbs: ${document.getElementById('showBreadCrumbs').checked}\n\n`;
 
@@ -2637,7 +2649,6 @@
             yaml += `  disableXML: ${document.getElementById('disableXML').checked}\n`;
             yaml += `  minifyOutput: ${document.getElementById('minifyOutput').checked}\n\n`;
 
-            yaml += `pygmentsUseClasses: true\n`;
             yaml += `markup:\n`;
             yaml += `  goldmark:\n`;
             yaml += `    renderer:\n`;
@@ -2899,7 +2910,7 @@ export default middleware;
                 'title', 'baseURL', 'languageCode', 'theme', 'copyright',
                 'paginationPager', 'summaryLength', 'favicon', 'favicon16x16',
                 'favicon32x32', 'apple_touch_icon', 'safari_pinned_tab',
-                'labelText', 'labelIcon', 'labelIconHeight', 'defaultImage',
+                'labelText', 'labelIcon', 'labelIconHeight', 'shareImages', 'defaultImage',
                 'author', 'keywords', 'description', 'footerText',
                 // 首页配置
                 'cardModeTitle', 'cardModeSubtitle', 'cardModeImageUrl',
@@ -3329,10 +3340,12 @@ export default middleware;
                             config.hugoYaml.description = trimmed.substring('description:'.length).trim();
                         } else if (trimmed.startsWith('author:')) {
                             config.hugoYaml.author = trimmed.substring('author:'.length).trim();
-                        } else if (trimmed.startsWith('images:')) {
+                        } else if (trimmed.startsWith('shareImages:') || trimmed.startsWith('images:')) {
                             // 提取图片路径
                             const match = trimmed.match(/\["([^"]+)"\]/);
-                            if (match) config.hugoYaml.defaultImage = match[1];
+                            if (match) config.hugoYaml.shareImages = match[1];
+                        } else if (trimmed.startsWith('defaultImage:')) {
+                            config.hugoYaml.defaultImage = trimmed.substring('defaultImage:'.length).trim().replace(/['"]/g, '');
                         } else if (trimmed.startsWith('mainSections:')) {
                             config.hugoYaml.mainSections = trimmed.substring('mainSections:'.length).trim();
                         } else if (trimmed.startsWith('keywords:')) {
@@ -3385,8 +3398,10 @@ export default middleware;
                             config.hugoYaml.hideSummary = trimmed.includes('true');
                         } else if (trimmed.startsWith('ShowShareButtons:')) {
                             config.hugoYaml.showShareButtons = trimmed.includes('true');
-                        } else if (trimmed.startsWith('ShowCodeCopyButtons:')) {
+                        } else if (trimmed.startsWith('showCopyButtons:')) {
                             config.hugoYaml.showCodeCopyButtons = trimmed.includes('true');
+                        } else if (trimmed.startsWith('chromaStyle:')) {
+                            config.hugoYaml.chromaStyle = trimmed.substring('chromaStyle:'.length).trim().replace(/['"]/g, '');
                         } else if (trimmed.startsWith('ShowRssButtonInSectionTermList:')) {
                             config.hugoYaml.showRssButtonInSectionTermList = trimmed.includes('true');
                         } else if (trimmed.startsWith('ShowBreadCrumbs:')) {

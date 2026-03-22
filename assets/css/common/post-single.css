@@ -3,6 +3,41 @@
     margin: 24px 0 var(--content-gap) 0;
 }
 
+/* Premium Post Cover Styling */
+.post-single .entry-cover {
+    width: calc(var(--nav-width) + var(--gap) * 2);
+    max-width: 100vw;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 24px;
+    border-radius: 0;
+    overflow: hidden;
+    box-shadow: none;
+}
+
+.post-single .entry-cover img {
+    width: 100%;
+    height: auto;
+    max-height: 220px;
+    object-fit: cover;
+    display: block;
+    aspect-ratio: 32 / 9; /* Ultra-wide cinematic / Panoramic ratio */
+    border-radius: 0; /* Override global border-radius from post-entry.css */
+    transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.post-single .entry-cover:hover img {
+    transform: scale(1.02);
+}
+
+.post-single .entry-cover figcaption {
+    padding: 10px 15px;
+    font-size: 14px;
+    color: var(--secondary);
+    text-align: center;
+    background: var(--code-bg);
+}
+
 .post-title {
     margin-bottom: 2px;
     font-size: 40px;
@@ -283,7 +318,7 @@
 
 .toc-sidebar {
     position: fixed;
-    top: 25vh;
+    top: 0; /* JS will precisely control the position */
     min-width: 150px;
     max-width: 300px;
     width: auto;
@@ -385,7 +420,8 @@
     position: fixed;
     top: 0;
     bottom: 0;
-    width: calc((100vw - var(--main-width)) / 2);
+    /* 缩小检测区，给正文容器（特别是边缘的日期等元数据）留出 80px 的安全缓冲距离，防止误触 */
+    width: calc((100vw - var(--main-width)) / 2 - 80px);
     z-index: 99;
     cursor: default;
 }

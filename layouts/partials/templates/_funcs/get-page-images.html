@@ -1,5 +1,5 @@
 {{- $imgs := slice }}
-{{- $imgParams := .Params.images }}
+{{- $imgParams := or .Params.shareImages .Params.images }}
 {{- $resources := .Resources.ByType "image" -}}
 {{/* Find featured image resources if the images parameter is empty. */}}
 {{- if not $imgParams }}
@@ -14,7 +14,7 @@
 {{- end }}
 {{/* Use the first one of site images as the fallback. */}}
 {{- if and (not $imgParams) (not $imgs) }}
-  {{- with site.Params.images }}
+  {{- with or site.Params.shareImages site.Params.images }}
     {{- $imgParams = first 1 . }}
   {{- end }}
 {{- end }}

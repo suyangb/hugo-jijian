@@ -64,15 +64,11 @@
 {{- end }}
 
 {{- /* 获取封面图 URL 用于悬浮预览 */ -}}
-{{- $coverUrl := "" }}
-{{- with .Params.cover }}
-{{- if .image }}
-{{- $coverUrl = .image | absURL }}
-{{- end }}
-{{- end }}
+{{- $coverUrl := .Params.cover.image | default site.Params.defaultImage | absURL }}
+{{- if not $coverUrl }}{{ $coverUrl = "" }}{{ end }}
 
   {{- $isEncrypted := or (in .File.Path "protected") .Params.mima .Params.password -}}
-  <article class="{{ $class }}" {{ with $coverUrl }} data-cover="{{ . }}" {{ end }} {{ if $isEncrypted }}data-pagefind-ignore{{ end }}>
+  <article class="{{ $class }}" {{ if and $coverUrl (not .Params.cover.hidden) }} data-cover="{{ $coverUrl }}" {{ end }} {{ if $isEncrypted }}data-pagefind-ignore{{ end }}>
   <header class="entry-header">
     <h2 class="entry-hint-parent">
       {{- .Title }}
@@ -93,7 +89,7 @@
   {{- end }}
   {{- if not (.Param "hideMeta") }}
   <footer class="entry-footer">
-    {{- partial "post_meta.html" . -}}
+    {{- partial "post_meta.html" (dict "page" . "is_list" true) -}}
   </footer>
   {{- end }}
   <a class="entry-link" aria-label="post link to {{ .Title | plainify }}" href="{{ .Permalink }}"></a>

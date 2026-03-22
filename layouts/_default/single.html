@@ -12,10 +12,19 @@
   {{- end }}
 
   <article class="post-single" {{ if or (in .File.Path "protected") .Params.mima .Params.password }}data-pagefind-ignore{{ else }}data-pagefind-body{{ end }}>
+    {{- $isHidden := (.Param "cover.hiddenInSingle") | default (.Param "cover.hidden") | default false }}
+    {{- partial "cover.html" (dict "cxt" . "IsSingle" true "isHidden" $isHidden) }}
+
     <header class="post-header">
       {{ partial "breadcrumbs.html" . }}
       <h1 class="post-title entry-hint-parent">
-        {{ .Title }}
+        <span class="post-title-text">
+          {{- if and (not $isEncrypted) .Params.realTitle -}}
+            {{ .Params.realTitle }}
+          {{- else -}}
+            {{ .Title }}
+          {{- end -}}
+        </span>
         {{- if .Draft }}
         <span class="entry-hint" title="Draft">
           <svg xmlns="http://www.w3.org/2000/svg" height="35" viewBox="0 -960 960 960" fill="currentColor">
@@ -52,6 +61,9 @@
              data-button="{{ T "auth_button" }}"
              data-back="{{ T "auth_back" }}"
              data-error="{{ T "auth_error" }}"></div>
+        {{- if .Params.realTitle -}}
+          <div id="real-title" style="display:none">{{ .Params.realTitle }}</div>
+        {{- end -}}
       {{- end }}
 
       <div class="post-content">
@@ -103,11 +115,47 @@
     let hideTimer = null;
     let currentPosition = null;
 
-    // 设置目录的垂直位置从文章标题下方开始
-    const postTitle = document.querySelector('.post-title');
-    if (postTitle) {
-      const titleRect = postTitle.getBoundingClientRect();
-      tocSidebar.style.top = (titleRect.bottom + window.scrollY) + 'px';
+    // 设置目录的垂直位置及其视差滚动效果
+    function updateTocPosition() {
+      const anchor = document.querySelector('.breadcrumbs') || document.querySelector('.post-title');
+      if (anchor && tocSidebar) {
+        // 锚点相对于视口（窗口）的即时位置
+        const rect = anchor.getBoundingClientRect();
+        const scrollY = window.scrollY;
+        
+        // 视差配置：只有滑过 100px 后，目录才开始产生向上位移的“迟滞”感
+        const threshold = 100; 
+        const parallaxFactor = 0.3; // 视差系数
+        const minTop = 80; // 吸顶保底，不让目录滑出屏幕顶部
+        
+        // 计算视差补偿量：当滚动超过阈值时，目录会比文章滑得慢一些
+        const parallaxOffset = Math.max(0, scrollY - threshold) * parallaxFactor;
+        
+        // 最终 top：原本的锚点位置 + 视差偏移。
+        // 这会让目录在视觉上“飘”在面包屑下方一点点，且不会完全移出。
+        let targetTop = rect.top + parallaxOffset;
+        
+        // 保底：不要滑到导航轮廓以上（吸顶）
+        targetTop = Math.max(minTop, targetTop);
+        
+        tocSidebar.style.top = targetTop + 'px';
+      }
+    }
+
+    // 初始化计算位置
+    updateTocPosition();
+    
+    // 监听滚动事件，实现视差效果
+    window.addEventListener('scroll', updateTocPosition);
+
+    // 如果有封面图，等待图片加载完成后重新校准初始高度，防止布局偏移
+    const coverImg = document.querySelector('.entry-cover img');
+    if (coverImg) {
+      if (coverImg.complete) {
+        updateTocPosition();
+      } else {
+        coverImg.addEventListener('load', updateTocPosition);
+      }
     }
 
     // 页面两侧的检测区域
