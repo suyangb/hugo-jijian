@@ -89,12 +89,12 @@
             margin-top: 120px;
             margin-bottom: 70px;
             min-height: calc(100vh - 190px);
-            padding: 0 10%;
+            padding: 0 3.75%;
             gap: 5%;
         }
 
         .preview-area {
-            width: 25%;
+            width: 37.5%;
             background-color: #f8f9fa;
             border: 1px solid #e0e0e0;
             border-radius: 8px;
@@ -956,15 +956,10 @@
                         <label for="author">作者 <span class="config-key">(params.author)</span></label>
                         <input type="text" id="author" placeholder="作者名称">
                     </div>
-                    <div class="form-group">
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="enableFooter" onchange="toggleFooterConfig()">
-                            <label for="enableFooter">启用页脚信息 <span class="config-key">(params.footer)</span></label>
-                        </div>
-                    </div>
-                    <div class="sub-section" id="footerSection" style="display: none;">
+
+                    <div id="footerSection" style="margin-top: 15px;">
                         <div class="form-group">
-                            <label for="footerText">页脚文本</label>
+                            <label for="footerText">页脚文本 <span class="config-key">(params.footer.text)</span></label>
                             <input type="text" id="footerText" placeholder="如备案号">
                         </div>
                         <p class="hint-text">支持 Markdown 格式，例：[备案号](https://beian.miit.gov.cn/)</p>
@@ -1742,12 +1737,7 @@
             }
         }
 
-        // 页脚配置
-        function toggleFooterConfig() {
-            const checkbox = document.getElementById('enableFooter');
-            const section = document.getElementById('footerSection');
-            section.style.display = checkbox.checked ? 'block' : 'none';
-        }
+
 
         // 编辑文章链接配置
         function toggleEditPostConfig() {
@@ -2404,34 +2394,32 @@
             yaml = addFieldBlock(yaml, '  ', 'author', getValue('author'));
 
             // footer 部分
-            if (document.getElementById('enableFooter').checked) {
-                const footerText = getValue('footerText');
-                const badgeItems = document.querySelectorAll('#footerBadges .social-icon-item');
-                const validBadges = [];
+            const footerText = getValue('footerText');
+            const badgeItems = document.querySelectorAll('#footerBadges .social-icon-item');
+            const validBadges = [];
 
-                badgeItems.forEach(item => {
-                    const inputs = item.querySelectorAll('input');
-                    const bUrl = (inputs[0]?.value || '').trim();
-                    const bBadge = (inputs[1]?.value || '').trim();
-                    const bTitle = (inputs[2]?.value || '').trim();
-                    if (bUrl || bBadge || bTitle) {
-                        validBadges.push({ url: bUrl, badge: bBadge, title: bTitle });
-                    }
-                });
+            badgeItems.forEach(item => {
+                const inputs = item.querySelectorAll('input');
+                const bUrl = (inputs[0]?.value || '').trim();
+                const bBadge = (inputs[1]?.value || '').trim();
+                const bTitle = (inputs[2]?.value || '').trim();
+                if (bUrl || bBadge || bTitle) {
+                    validBadges.push({ url: bUrl, badge: bBadge, title: bTitle });
+                }
+            });
 
-                if (footerText || validBadges.length > 0) {
-                    yaml += `  footer:\n`;
-                    if (footerText) {
-                        yaml += `    text: "${footerText}"\n`;
-                    }
-                    if (validBadges.length > 0) {
-                        yaml += `    badges:\n`;
-                        validBadges.forEach(b => {
-                            yaml += `      - url: "${b.url}"\n`;
-                            yaml += `        badge: "${b.badge}"\n`;
-                            yaml += `        title: "${b.title}"\n`;
-                        });
-                    }
+            if (footerText || validBadges.length > 0) {
+                yaml += `  footer:\n`;
+                if (footerText) {
+                    yaml += `    text: "${footerText}"\n`;
+                }
+                if (validBadges.length > 0) {
+                    yaml += `    badges:\n`;
+                    validBadges.forEach(b => {
+                        yaml += `      - url: "${b.url}"\n`;
+                        yaml += `        badge: "${b.badge}"\n`;
+                        yaml += `        title: "${b.title}"\n`;
+                    });
                 }
             }
 
@@ -3022,7 +3010,7 @@ export default middleware;
                 // 压缩设置
                 'disableXML', 'minifyOutput',
                 // 其他文件
-                'enableFooter', 'depEdgeOne', 'hugoVersion',
+                'depEdgeOne', 'hugoVersion',
                 'pagefindVersion', 'jsYamlVersion', 'packageName', 'packageVersion',
                 'authDuration', 'authTip'
             ];
@@ -3085,18 +3073,16 @@ export default middleware;
             });
 
             // 收集页脚徽标
-            if (document.getElementById('enableFooter')?.checked) {
-                config.hugoYaml.footerBadges = [];
-                document.querySelectorAll('#footerBadges .social-icon-item').forEach(item => {
-                    const inputs = item.querySelectorAll('input');
-                    const url = inputs[0]?.value || '';
-                    const badge = inputs[1]?.value || '';
-                    const title = inputs[2]?.value || '';
-                    if (url || badge || title) {
-                        config.hugoYaml.footerBadges.push({ url, badge, title });
-                    }
-                });
-            }
+            config.hugoYaml.footerBadges = [];
+            document.querySelectorAll('#footerBadges .social-icon-item').forEach(item => {
+                const inputs = item.querySelectorAll('input');
+                const url = inputs[0]?.value || '';
+                const badge = inputs[1]?.value || '';
+                const title = inputs[2]?.value || '';
+                if (url || badge || title) {
+                    config.hugoYaml.footerBadges.push({ url, badge, title });
+                }
+            });
 
             // 收集语言配置
             if (document.getElementById('enableLanguages')?.checked) {
