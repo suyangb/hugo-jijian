@@ -968,10 +968,11 @@
                             <input type="text" id="footerText" placeholder="如备案号">
                         </div>
                         <p class="hint-text">支持 Markdown 格式，例：[备案号](https://beian.miit.gov.cn/)</p>
-                        
+
                         <div class="form-group" style="margin-top: 20px;">
                             <label>页脚徽标 (Badges/Shields) <span class="config-key">(params.footer.badges)</span></label>
-                            <p class="hint-text">显示在页脚文字上方。推荐使用 <a href="https://shields.io/" target="_blank">Shields.io</a> 生成。</p>
+                            <p class="hint-text">显示在页脚文字上方。推荐使用 <a href="https://shields.io/"
+                                    target="_blank">Shields.io</a> 生成。</p>
                             <div id="footerBadges"></div>
                             <button type="button" class="add-button" onclick="addBadge()">添加徽标</button>
                         </div>
@@ -1052,7 +1053,8 @@
                             <button type="button" class="path-fix-btn"
                                 onclick="fixStaticPath(this.previousElementSibling)">纠正</button>
                         </div>
-                        <p style="color: #666; font-size: 0.85em; margin-top: 5px;">用于 Open Graph / 社交平台分享链接时显示的默认图片 (分享预览图)</p>
+                        <p style="color: #666; font-size: 0.85em; margin-top: 5px;">用于 Open Graph / 社交平台分享链接时显示的默认图片
+                            (分享预览图)</p>
                     </div>
 
                     <div class="form-group">
@@ -1062,7 +1064,8 @@
                             <button type="button" class="path-fix-btn"
                                 onclick="fixStaticPath(this.previousElementSibling)">纠正</button>
                         </div>
-                        <p style="color: #666; font-size: 0.85em; margin-top: 5px;">当文章未设置 cover.image 时，在列表悬停或搜索预览中显示的保底图。</p>
+                        <p style="color: #666; font-size: 0.85em; margin-top: 5px;">当文章未设置 cover.image
+                            时，在列表悬停或搜索预览中显示的保底图。</p>
                     </div>
 
                     <div class="form-group">
@@ -1071,7 +1074,8 @@
                             <label for="coverDisplayDefault">在文章顶部显示默认封面图 <span
                                     class="config-key">(params.cover.displayDefault)</span></label>
                         </div>
-                        <p style="color: #666; font-size: 0.85em; margin-top: 5px;">开启后，即便文章未设置封面图，也会在顶部显示保底图。关闭则仅在列表悬浮或搜索预览中显示。</p>
+                        <p style="color: #666; font-size: 0.85em; margin-top: 5px;">
+                            开启后，即便文章未设置封面图，也会在顶部显示保底图。关闭则仅在列表悬浮或搜索预览中显示。</p>
                     </div>
                 </div>
 
@@ -1606,6 +1610,11 @@
                                     class="config-key">(analytics.naver.SiteVerificationTag)</span></label>
                             <input type="text" id="naverSiteVerification" placeholder="Naver Webmaster 验证码">
                         </div>
+                        <div class="form-group">
+                            <label for="baiduAnalytics">百度统计 ID <span
+                                    class="config-key">(analytics.baidu.hm)</span></label>
+                            <input type="text" id="baiduAnalytics" placeholder="百度统计 hm.js 后的 ID">
+                        </div>
                     </div>
                 </div>
 
@@ -1645,11 +1654,15 @@
                     </p>
 
                     <div class="form-group">
-                        <label for="pagefindVersion"><a href="https://github.com/Pagefind/pagefind/releases/latest" target="_blank" style="color: inherit; text-decoration: underline;">pagefind</a> <span class="hint-text">— 全文搜索依赖</span></label>
+                        <label for="pagefindVersion">pagefind <span class="hint-text">— 全文搜索依赖 (<a
+                                    href="https://github.com/Pagefind/pagefind/releases/latest" target="_blank"
+                                    style="color: inherit; text-decoration: underline;">查看最新版本</a>)</span></label>
                         <input type="text" id="pagefindVersion" value="^1.4.0" placeholder="版本号">
                     </div>
                     <div class="form-group">
-                        <label for="jsYamlVersion"><a href="https://www.npmjs.com/package/js-yaml" target="_blank" style="color: inherit; text-decoration: underline;">js-yaml</a> <span class="hint-text">— YAML 解析依赖（加密脚本必需）</span></label>
+                        <label for="jsYamlVersion">js-yaml <span class="hint-text">— 加密脚本必需的 YAML 解析依赖 (<a
+                                    href="https://www.npmjs.com/package/js-yaml" target="_blank"
+                                    style="color: inherit; text-decoration: underline;">查看最新版本</a>)</span></label>
                         <input type="text" id="jsYamlVersion" value="^4.1.0" placeholder="版本号">
                     </div>
                     <div class="form-group">
@@ -2396,7 +2409,7 @@
                 const footerText = getValue('footerText');
                 const badgeItems = document.querySelectorAll('#footerBadges .social-icon-item');
                 const validBadges = [];
-                
+
                 badgeItems.forEach(item => {
                     const inputs = item.querySelectorAll('input');
                     const bUrl = (inputs[0]?.value || '').trim();
@@ -2406,7 +2419,7 @@
                         validBadges.push({ url: bUrl, badge: bBadge, title: bTitle });
                     }
                 });
-                
+
                 if (footerText || validBadges.length > 0) {
                     yaml += `  footer:\n`;
                     if (footerText) {
@@ -2668,8 +2681,9 @@
                 const bingVerification = getValue('bingSiteVerification');
                 const yandexVerification = getValue('yandexSiteVerification');
                 const naverVerification = getValue('naverSiteVerification');
+                const baiduAnalytics = getValue('baiduAnalytics');
 
-                if (googleVerification || bingVerification || yandexVerification || naverVerification) {
+                if (googleVerification || bingVerification || yandexVerification || naverVerification || baiduAnalytics) {
                     yaml += `  analytics:\n`;
                     if (googleVerification) {
                         yaml += `    google:\n`;
@@ -2686,6 +2700,10 @@
                     if (naverVerification) {
                         yaml += `    naver:\n`;
                         yaml += `      SiteVerificationTag: "${naverVerification}"\n`;
+                    }
+                    if (baiduAnalytics) {
+                        yaml += `    baidu:\n`;
+                        yaml += `      hm: "${baiduAnalytics}"\n`;
                     }
                 }
             }
@@ -3001,7 +3019,7 @@ export default middleware;
                 'enableEditPost', 'editPostUrl', 'editPostText', 'editPostAppendFilePath',
                 // 站点验证
                 'enableAnalytics', 'googleSiteVerification', 'bingSiteVerification',
-                'yandexSiteVerification', 'naverSiteVerification',
+                'yandexSiteVerification', 'naverSiteVerification', 'baiduAnalytics',
                 // 压缩设置
                 'disableXML', 'minifyOutput',
                 // 其他文件
@@ -3382,6 +3400,12 @@ export default middleware;
             let currentBadge = null;
             let cardModeEnabled = false;
             let portalModeEnabled = false;
+            let inAnalytics = false;
+            let inAnalyticsGoogle = false;
+            let inAnalyticsBing = false;
+            let inAnalyticsYandex = false;
+            let inAnalyticsNaver = false;
+            let inAnalyticsBaidu = false;
 
             for (let i = 0; i < lines.length; i++) {
                 const line = lines[i];
@@ -3409,6 +3433,7 @@ export default middleware;
                     inMainSections = false;
                     inCode = false;
                     inCover = false;
+                    inAnalytics = false;
                 }
 
                 if (inParams) {
@@ -3423,6 +3448,7 @@ export default middleware;
                         inShareButtons = false;
                         inCode = false;
                         inCover = false;
+                        inAnalytics = false;
 
                         if (trimmed.startsWith('description:')) {
                             config.hugoYaml.description = trimmed.substring('description:'.length).trim();
@@ -3468,6 +3494,9 @@ export default middleware;
                             inCode = true;
                         } else if (trimmed === 'cover:') {
                             inCover = true;
+                        } else if (trimmed === 'analytics:') {
+                            inAnalytics = true;
+                            config.hugoYaml.enableAnalytics = true;
                         } else if (trimmed.startsWith('comments:')) {
                             config.hugoYaml.comments = trimmed.includes('true');
                         } else if (trimmed.startsWith('showtoc:') || trimmed.startsWith('Showtoc:')) {
@@ -3507,8 +3536,8 @@ export default middleware;
                         } else if (trimmed.startsWith('disableScrollToTop:')) {
                             config.hugoYaml.disableScrollToTop = trimmed.includes('true');
                         } else if (trimmed.startsWith('disableThemeToggle:')) {
-                             config.hugoYaml.disableThemeToggle = trimmed.includes('true');
-                         } else if (trimmed.startsWith('hidemeta:')) {
+                            config.hugoYaml.disableThemeToggle = trimmed.includes('true');
+                        } else if (trimmed.startsWith('hidemeta:')) {
                             config.hugoYaml.hidemeta = trimmed.includes('true');
                         } else if (trimmed.startsWith('authDuration:')) {
                             config.hugoYaml.authDuration = trimmed.substring('authDuration:'.length).trim();
@@ -3682,6 +3711,32 @@ export default middleware;
                     if (inCover && indent === 4) {
                         if (trimmed.startsWith('displayDefault:')) {
                             config.hugoYaml.coverDisplayDefault = trimmed.includes('true');
+                        }
+                    }
+
+                    // analytics 内字段
+                    if (inAnalytics) {
+                        if (indent === 4) {
+                            if (trimmed === 'google:') inAnalyticsGoogle = true;
+                            else if (trimmed === 'bing:') inAnalyticsBing = true;
+                            else if (trimmed === 'yandex:') inAnalyticsYandex = true;
+                            else if (trimmed === 'naver:') inAnalyticsNaver = true;
+                            else if (trimmed === 'baidu:') inAnalyticsBaidu = true;
+
+                            // Reset other analytics sub-states
+                            if (trimmed !== 'google:') inAnalyticsGoogle = false;
+                            if (trimmed !== 'bing:') inAnalyticsBing = false;
+                            if (trimmed !== 'yandex:') inAnalyticsYandex = false;
+                            if (trimmed !== 'naver:') inAnalyticsNaver = false;
+                            if (trimmed !== 'baidu:') inAnalyticsBaidu = false;
+                        }
+                        if (indent === 6) {
+                            const cleanVal = (t, p) => t.substring(p.length).trim().replace(/^"|"$/g, '');
+                            if (inAnalyticsGoogle && trimmed.startsWith('SiteVerificationTag:')) config.hugoYaml.googleSiteVerification = cleanVal(trimmed, 'SiteVerificationTag:');
+                            if (inAnalyticsBing && trimmed.startsWith('SiteVerificationTag:')) config.hugoYaml.bingSiteVerification = cleanVal(trimmed, 'SiteVerificationTag:');
+                            if (inAnalyticsYandex && trimmed.startsWith('SiteVerificationTag:')) config.hugoYaml.yandexSiteVerification = cleanVal(trimmed, 'SiteVerificationTag:');
+                            if (inAnalyticsNaver && trimmed.startsWith('SiteVerificationTag:')) config.hugoYaml.naverSiteVerification = cleanVal(trimmed, 'SiteVerificationTag:');
+                            if (inAnalyticsBaidu && trimmed.startsWith('hm:')) config.hugoYaml.baiduAnalytics = cleanVal(trimmed, 'hm:');
                         }
                     }
                 }
