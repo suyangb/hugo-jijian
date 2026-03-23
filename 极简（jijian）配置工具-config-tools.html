@@ -3085,26 +3085,32 @@ export default middleware;
             });
 
             // 收集页脚徽标
-            config.hugoYaml.footerBadges = [];
-            document.querySelectorAll('#footerBadges .social-icon-item').forEach(item => {
-                const inputs = item.querySelectorAll('input');
-                config.hugoYaml.footerBadges.push({
-                    url: inputs[0]?.value || '',
-                    badge: inputs[1]?.value || '',
-                    title: inputs[2]?.value || ''
+            if (document.getElementById('enableFooter')?.checked) {
+                config.hugoYaml.footerBadges = [];
+                document.querySelectorAll('#footerBadges .social-icon-item').forEach(item => {
+                    const inputs = item.querySelectorAll('input');
+                    const url = inputs[0]?.value || '';
+                    const badge = inputs[1]?.value || '';
+                    const title = inputs[2]?.value || '';
+                    if (url || badge || title) {
+                        config.hugoYaml.footerBadges.push({ url, badge, title });
+                    }
                 });
-            });
+            }
 
             // 收集语言配置
-            config.hugoYaml.languages = [];
-            document.querySelectorAll('#languagesContainer .language-entry').forEach(entry => {
-                config.hugoYaml.languages.push({
-                    code: entry.querySelector('.lang-code')?.value || '',
-                    name: entry.querySelector('.lang-name')?.value || '',
-                    weight: entry.querySelector('.lang-weight')?.value || '',
-                    contentDir: entry.querySelector('.lang-content-dir')?.value || ''
+            if (document.getElementById('enableLanguages')?.checked) {
+                config.hugoYaml.languages = [];
+                document.querySelectorAll('#languagesContainer .language-entry').forEach(entry => {
+                    const code = entry.querySelector('.lang-code')?.value || '';
+                    const name = entry.querySelector('.lang-name')?.value || '';
+                    const weight = entry.querySelector('.lang-weight')?.value || '';
+                    const contentDir = entry.querySelector('.lang-content-dir')?.value || '';
+                    if (code && name) {
+                        config.hugoYaml.languages.push({ code, name, weight, contentDir });
+                    }
                 });
-            });
+            }
 
             return config;
         }
@@ -3207,22 +3213,11 @@ export default middleware;
                 config.hugoYaml.languages.forEach(lang => {
                     addLanguageEntry(lang.code || '', lang.name || '', lang.weight || '', lang.contentDir || '');
                 });
-                // 自动勾选多语言配置复选框
-                const enableLanguagesEl = document.getElementById('enableLanguages');
-                if (enableLanguagesEl) {
-                    enableLanguagesEl.checked = true;
-                    enableLanguagesEl.dispatchEvent(new Event('change'));
-                }
             }
 
             // 恢复页脚信息
             if (config.hugoYaml.footerText) {
-                const enableFooterEl = document.getElementById('enableFooter');
                 const footerTextEl = document.getElementById('footerText');
-                if (enableFooterEl) {
-                    enableFooterEl.checked = true;
-                    enableFooterEl.dispatchEvent(new Event('change'));
-                }
                 if (footerTextEl) {
                     footerTextEl.value = config.hugoYaml.footerText;
                 }
