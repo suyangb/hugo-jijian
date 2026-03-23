@@ -18,7 +18,8 @@
     display: flex;
     justify-content: center;
     gap: 12px;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
+    /* 减小一点边距，使整体更紧凑 */
     flex-wrap: wrap;
     align-items: center;
 }
@@ -112,10 +113,54 @@
 
 /* 移动端固定按钮位置调整 */
 @media (max-width: 768px) {
+    .footer-badges {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        justify-content: flex-start;
+        padding-bottom: 2px;
+        /* 进一步贴合 */
+        margin-bottom: 4px;
+        /* 进一步贴合下方版权信息 */
+        gap: 8px;
+        /* 间距也相应调小 */
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .footer-badges img {
+        height: 18px;
+        /* 手机端缩小高度 */
+    }
+
+    .footer-badges::-webkit-scrollbar {
+        display: none;
+        /* Chrome/Safari 隐藏滚动条 */
+    }
+
+    /* 移动端如果徽标不多，依然居中；如果多，则靠左开始滑动 */
+    .footer-badges::after,
+    .footer-badges::before {
+        content: '';
+        margin: auto;
+    }
+
+    .footer-badges a {
+        flex-shrink: 0;
+        /* 禁止徽标被挤压 */
+        transition: none !important;
+    }
+
+    .footer-badges a:hover {
+        transform: none !important;
+        /* 移动端禁用上浮动画 */
+    }
+
     .top-link {
         right: 15px;
         bottom: 70px;
     }
+
     .theme-toggle-fixed {
         right: 15px;
         bottom: 125px;

@@ -76,6 +76,35 @@
         }
     }
 
+    // 页脚徽标横向滚动提示 (移动端)
+    window.addEventListener('load', () => {
+        const badges = document.querySelector('.footer-badges');
+        if (badges && window.innerWidth <= 768) {
+            const slowScroll = (target, duration) => {
+                const start = badges.scrollLeft;
+                const startTime = performance.now();
+                const animate = (currentTime) => {
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    // 使用 easeInOutQuad 缓动函数
+                    const ease = progress < 0.5 ? 2 * progress * progress : -1 + (4 - 2 * progress) * progress;
+                    badges.scrollLeft = start + (target - start) * ease;
+                    if (progress < 1) requestAnimationFrame(animate);
+                };
+                requestAnimationFrame(animate);
+            };
+
+            setTimeout(() => {
+                if (badges.scrollWidth > badges.clientWidth) {
+                    // 滑出过程：800ms
+                    slowScroll(40, 800);
+                    // 逗留一会再弹回：1400ms 后开始弹回，弹回过程 800ms
+                    setTimeout(() => slowScroll(0, 800), 1400);
+                }
+            }, 1000);
+        }
+    });
+
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener("click", function (e) {
             e.preventDefault();
