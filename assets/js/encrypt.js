@@ -96,15 +96,16 @@ function processFile(filePath) {
 <style>
 .hcl-encrypt-wrapper { margin: 60px auto; padding: 20px; max-width: 420px; text-align: center; font-family: inherit; }
 .hcl-encrypt-card { background: rgba(255, 255, 255, 0.7) !important; backdrop-filter: blur(25px) saturate(200%); -webkit-backdrop-filter: blur(25px) saturate(200%); border: 1px solid rgba(255, 255, 255, 0.4) !important; border-radius: 30px; padding: 50px 40px; box-shadow: 0 30px 60px -12px rgba(0,0,0,0.18); position: relative; z-index: 999; }
-.dark .hcl-encrypt-card { background: rgba(28, 28, 30, 0.8) !important; border-color: rgba(255, 255, 255, 0.1) !important; }
+[data-theme='dark'] .hcl-encrypt-card { background: rgba(30, 30, 32, 0.9) !important; border-color: rgba(255, 255, 255, 0.1) !important; box-shadow: 0 30px 60px -12px rgba(0,0,0,0.5); }
 .hcl-icon { font-size: 60px; margin-bottom: 25px; animation: hcl-float 3s ease-in-out infinite; }
 @keyframes hcl-float { 0% { transform: translateY(0px); } 50% { transform: translateY(-12px); } 100% { transform: translateY(0px); } }
 .hcl-title { font-size: 1.5rem; font-weight: 700; color: #1d1d1f; margin-bottom: 12px; }
-.dark .hcl-title { color: #fff; }
+[data-theme='dark'] .hcl-title { color: #f1f1f1; }
 .hcl-tip { font-size: 0.95rem; color: #86868b; margin-bottom: 40px; }
 .hcl-input-group { display: flex; flex-direction: column; gap: 14px; }
 #hcl-pw-input { background: rgba(0, 0, 0, 0.05); border: 2px solid transparent; padding: 18px 20px; border-radius: 16px; font-size: 16px; outline: none; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); color: inherit; text-align: center; }
-.dark #hcl-pw-input { background: rgba(255, 255, 255, 0.08); }
+[data-theme='dark'] #hcl-pw-input { background: rgba(255, 255, 255, 0.1); color: #fff; }
+[data-theme='dark'] .hcl-tip { color: #a1a1a6; }
 #hcl-pw-input:focus { border-color: #0071e3; background: transparent; }
 #hcl-pw-input.error { border-color: #ff3b30 !important; background: rgba(255, 59, 48, 0.1) !important; }
 .hcl-btn-primary { background: #0071e3; color: white; border: none; padding: 18px; border-radius: 16px; font-size: 17px; font-weight: 600; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
