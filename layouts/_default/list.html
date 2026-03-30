@@ -45,9 +45,20 @@
 {{- $pages = where $pages "Params.hiddenInList" "ne" true }}
 {{- end }}
 
-{{- /* 针对 posts 目录，按最后修改时间排序 */ -}}
-{{- if and (eq .Section "posts") (site.Params.ShowLastMod | default true) }}
-  {{- $pages = $pages.ByLastmod.Reverse }}
+{{- /* 针对 posts 目录，按置顶权重和最后修改时间排序 */ -}}
+{{- if eq .Section "posts" }}
+  {{- $pin := where $pages "Params.pin" "gt" 0 }}
+  {{- $normal := $pages | complement $pin }}
+
+  {{- if site.Params.ShowLastMod | default true }}
+    {{- $pin = $pin.ByLastmod.Reverse }}
+    {{- $normal = $normal.ByLastmod.Reverse }}
+  {{- else }}
+    {{- $pin = $pin.ByDate.Reverse }}
+    {{- $normal = $normal.ByDate.Reverse }}
+  {{- end }}
+  {{- $pin = sort $pin "Params.pin" "asc" }}
+  {{- $pages = $pin | append $normal }}
 {{- end }}
 
 {{- if .IsHome }}
@@ -93,14 +104,23 @@
   <header class="entry-header">
     <h2 class="entry-hint-parent">
       {{- .Title }}
-      {{- if .Draft }}
-      <span class="entry-hint" title="Draft">
-        <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" fill="currentColor">
-          <path
-            d="M160-410v-60h300v60H160Zm0-165v-60h470v60H160Zm0-165v-60h470v60H160Zm360 580v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q9 9 13 20t4 22q0 11-4.5 22.5T862.09-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z" />
-        </svg>
+      <span class="entry-hint-container">
+        {{- if .Draft }}
+        <span class="entry-hint" title="Draft">
+          <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" fill="currentColor">
+            <path
+              d="M160-410v-60h300v60H160Zm0-165v-60h470v60H160Zm0-165v-60h470v60H160Zm360 580v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q9 9 13 20t4 22q0 11-4.5 22.5T862.09-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z" />
+          </svg>
+        </span>
+        {{- end }}
+        {{- if and .Params.pin (findRE "^[1-9][0-9]*$" (printf "%v" .Params.pin)) }}
+        <span class="entry-hint" title="Sticky">
+          <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 -960 960 960" fill="currentColor">
+            <path d="m640-480 80 80v80H520v240l-40 40-40-40v-240H240v-80l80-80v-280h-40v-80h400v80h-40v280Z"/>
+          </svg>
+        </span>
+        {{- end }}
       </span>
-      {{- end }}
     </h2>
   </header>
   {{- if ne (.Param "hideSummary") true }}
