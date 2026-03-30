@@ -1,6 +1,3 @@
-# Wiki 目录（独立管理，不提交到主题仓库）
-wiki/
-
 # IDE 和编辑器
 .idea/
 .vscode/

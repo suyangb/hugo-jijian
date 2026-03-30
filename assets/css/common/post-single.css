@@ -21,8 +21,8 @@
     max-height: 220px;
     object-fit: cover;
     display: block;
-    aspect-ratio: 32 / 9;
-    /* Ultra-wide cinematic / Panoramic ratio */
+    aspect-ratio: 32 / 5;
+    /* Panoramic wide ratio */
     border-radius: 0;
     /* Override global border-radius from post-entry.css */
     transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);

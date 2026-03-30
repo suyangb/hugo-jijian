@@ -24,17 +24,16 @@
 
 ## 更新日志
 
-### 2026-03-29 22:20
-- 版本已经更新了，但wiki 文档还在更新中......
+### 2026-03-30 13:40
+- 新增了 `文章列表置顶功能`，在文章的 `Front Matter` 中添加 `pin: 1` 即可置顶文章，数字越小越靠前，仅支持正整数。
+- 优化了文章中“上下篇”按钮的逻辑，支持`分类内循环`。
+- 在文章底部的标签（tags）前添加了`分类（categories）`的链接显示。
+- 优化手机端的显示，posts列表页的“下一页”按钮居中了，避免和“返回顶部”按钮重叠。优化手机端列表也，点击时不会再显示封面图了。封面图是电脑端鼠标悬停时才显示的。
+- 算啦，我不想搞Github上的这个 📚wiki 了，直接去我网站看吧，传送门在这里：[莫莫先生丨Jijian Wiki](https://ihcll.cn/categories/jijian-wiki/)。
 
-## 文档
+## 📚文档 JijianWiki
 
-~~📚 详细文档请查看 [Wiki](https://github.com/hcllmsx/hugo-jijian/wiki)~~
-
-> [!NOTE]
->
-> wiki 文档还在更新中，但这里[莫莫先生丨Jijian Wiki](https://ihcll.cn/categories/jijian-wiki/)也可以看。
->
+去这里看吧：[莫莫先生丨Jijian Wiki](https://ihcll.cn/categories/jijian-wiki/)
 
 ## 致谢
 
