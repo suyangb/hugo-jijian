@@ -63,17 +63,17 @@
             element: "#search",
             showSubResults: true,
             translations: {
-                placeholder: "{{ .Params.placeholder | default (printf `%s ↵` .Title) }}",
-                clear_search: "清除",
-                load_more: "加载更多",
-                search_label: "搜索",
-                filters_label: "筛选",
-                zero_results: "没有找到关于 [SEARCH_TERM] 的结果",
-                many_results: "找到 [COUNT] 条关于 [SEARCH_TERM] 的结果",
-                one_result: "找到 1 条关于 [SEARCH_TERM] 的结果",
-                alt_search: "没有找到关于 [SEARCH_TERM] 的结果。显示关于 [DIFFERENT_TERM] 的结果：",
-                search_suggestion: "没有找到关于 [SEARCH_TERM] 的结果。请尝试以下搜索之一：",
-                searching: "正在搜索 [SEARCH_TERM]..."
+                placeholder: "{{ .Params.placeholder | default (T `search_placeholder`) | default (printf `%s ↵` .Title) }}",
+                clear_search: "{{ T `search_clear_search` }}",
+                load_more: "{{ T `search_load_more` }}",
+                search_label: "{{ T `search_search_label` }}",
+                filters_label: "{{ T `search_filters_label` }}",
+                zero_results: "{{ T `search_zero_results` }}",
+                many_results: "{{ T `search_many_results` }}",
+                one_result: "{{ T `search_one_result` }}",
+                alt_search: "{{ T `search_alt_search` }}",
+                search_suggestion: "{{ T `search_search_suggestion` }}",
+                searching: "{{ T `search_searching` }}"
             }
         });
     });

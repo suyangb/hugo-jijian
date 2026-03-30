@@ -78,3 +78,26 @@
   translation: "Back to Previous Page"
 - id: auth_error
   translation: "❌ Incorrect password, please try again"
+
+- id: search_placeholder
+  translation: "Search here..."
+- id: search_clear_search
+  translation: "Clear"
+- id: search_load_more
+  translation: "Load more"
+- id: search_search_label
+  translation: "Search"
+- id: search_filters_label
+  translation: "Filters"
+- id: search_zero_results
+  translation: "No results for [SEARCH_TERM]"
+- id: search_many_results
+  translation: "Found [COUNT] results for [SEARCH_TERM]"
+- id: search_one_result
+  translation: "Found 1 result for [SEARCH_TERM]"
+- id: search_alt_search
+  translation: "No results for [SEARCH_TERM]. Showing results for [DIFFERENT_TERM] instead:"
+- id: search_search_suggestion
+  translation: "No results for [SEARCH_TERM]. Try one of the following:"
+- id: search_searching
+  translation: "Searching for [SEARCH_TERM]..."

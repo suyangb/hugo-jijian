@@ -78,3 +78,26 @@
   translation: "返回上一頁"
 - id: auth_error
   translation: "❌ 密碼錯誤，請重新輸入"
+
+- id: search_placeholder
+  translation: "在此搜尋..."
+- id: search_clear_search
+  translation: "清除"
+- id: search_load_more
+  translation: "載入更多"
+- id: search_search_label
+  translation: "搜尋"
+- id: search_filters_label
+  translation: "篩選"
+- id: search_zero_results
+  translation: "沒有找到關於 [SEARCH_TERM] 的結果"
+- id: search_many_results
+  translation: "找到 [COUNT] 條关于 [SEARCH_TERM] 的結果"
+- id: search_one_result
+  translation: "找到 1 條关于 [SEARCH_TERM] 的結果"
+- id: search_alt_search
+  translation: "沒有找到关于 [SEARCH_TERM] 的結果。顯示关于 [DIFFERENT_TERM] 的結果："
+- id: search_search_suggestion
+  translation: "沒有找到关于 [SEARCH_TERM] 的結果。請嘗試以下搜尋之一："
+- id: search_searching
+  translation: "正在搜尋 [SEARCH_TERM]..."
