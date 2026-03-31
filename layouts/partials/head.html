@@ -70,14 +70,7 @@
 {{- $common := (resources.Match "css/common/*.css") | resources.Concat "assets/css/common.css" }}
 
 {{- /* markup.highlight.noClasses should be set to `false` */}}
-{{- $chroma_style := "catppuccin-macchiato" }}
-{{- if isset site.Params "code" }}
-  {{- $chroma_style = site.Params.code.chromaStyle | default "catppuccin-macchiato" }}
-{{- end }}
-{{- $chroma_styles := (resources.Get (printf "css/chroma/%s.css" $chroma_style)) }}
-{{- if not $chroma_styles }}
-{{- $chroma_styles = (resources.Get "css/chroma/catppuccin-macchiato.css") }}
-{{- end }}
+{{- $chroma_styles := (resources.Get "css/chroma/github.css") }}
 {{- $chroma_mod := (resources.Get "css/includes/chroma-mod.css") }}
 
 {{- /* order is important */}}
