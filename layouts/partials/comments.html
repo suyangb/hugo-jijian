@@ -80,12 +80,17 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', fun
 @keyframes giscus-spin { to { transform: rotate(360deg); } }
 .giscus-retry { margin-top: 1rem; padding: 0.5rem 1rem; border: none; border-radius: 4px; background-color: var(--accent-color, #007bff); color: white; cursor: pointer; font-size: 1rem; }
 </style>
+{{- $giscusTerm := .Title }}
+{{- with .Site.Params.giscus.termSuffix }}
+  {{- $giscusTerm = printf "%s-%s" $.Title . }}
+{{- end }}
 <script src="https://giscus.app/client.js"
         data-repo="{{ .Site.Params.giscus.repo }}"
         data-repo-id="{{ .Site.Params.giscus.repoId }}"
         data-category="{{ .Site.Params.giscus.category }}"
         data-category-id="{{ .Site.Params.giscus.categoryId }}"
-        data-mapping="{{ .Site.Params.giscus.mapping | default "title" }}"
+        data-mapping="{{ .Site.Params.giscus.mapping | default "specific" }}"
+        data-term="{{ .Site.Params.giscus.term | default $giscusTerm }}"
         data-strict="{{ .Site.Params.giscus.strict | default "0" }}"
         data-reactions-enabled="{{ .Site.Params.giscus.reactionsEnabled | default "1" }}"
         data-emit-metadata="{{ .Site.Params.giscus.emitMetadata | default "0" }}"

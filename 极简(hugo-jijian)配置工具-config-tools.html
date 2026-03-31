@@ -1494,6 +1494,12 @@
                             <input type="text" id="giscusCategoryId" placeholder="your-category-id">
                         </div>
                         <div class="form-group">
+                            <label for="giscusTermSuffix">讨论帖标题后缀 <span
+                                    class="config-key">(params.giscus.termSuffix)</span></label>
+                            <input type="text" id="giscusTermSuffix" placeholder="例如: XXXX">
+                            <small class="hint">配置后，在 Github 生成的讨论贴的标题将会变成“文章原生标题-XXXX”</small>
+                        </div>
+                        <div class="form-group">
                             <label for="giscusLang">语言代码 <span class="config-key">(params.giscus.lang)</span></label>
                             <input type="text" id="giscusLang" placeholder="zh-CN, en, ja 等（注意大小写）">
                             <small class="hint">必须 https://giscus.app/ 该网站中给出的代码中的语言一致，注意大小写</small>
@@ -2599,14 +2605,16 @@
                 const giscusCategory = getValue('giscusCategory');
                 const giscusCategoryId = getValue('giscusCategoryId');
                 const giscusLang = getValue('giscusLang');
+                const giscusTermSuffix = getValue('giscusTermSuffix');
 
-                if (giscusRepo || giscusRepoId || giscusCategory || giscusCategoryId || giscusLang) {
+                if (giscusRepo || giscusRepoId || giscusCategory || giscusCategoryId || giscusLang || giscusTermSuffix) {
                     yaml += `  giscus:\n`;
                     if (giscusRepo) yaml += `    repo: "${giscusRepo}"\n`;
                     if (giscusRepoId) yaml += `    repoId: "${giscusRepoId}"\n`;
                     if (giscusCategory) yaml += `    category: "${giscusCategory}"\n`;
                     if (giscusCategoryId) yaml += `    categoryId: "${giscusCategoryId}"\n`;
                     if (giscusLang) yaml += `    lang: "${giscusLang}"\n`;
+                    if (giscusTermSuffix) yaml += `    termSuffix: "${giscusTermSuffix}"\n`;
                 }
             }
 
@@ -3017,7 +3025,7 @@ export default middleware;
                 // 其他高级设置
                 'showReadingTime', 'showWordCount', 'showShareButtons',
                 'showPostNavLinks', 'disableScrollToTop',
-                'comments', 'giscusRepo', 'giscusRepoId', 'giscusCategory', 'giscusCategoryId', 'giscusLang',
+                'comments', 'giscusRepo', 'giscusRepoId', 'giscusCategory', 'giscusCategoryId', 'giscusLang', 'giscusTermSuffix',
                 // 代码高亮
                 'showCodeCopyButtons', 'lineNos',
                 // 输出设置
@@ -3699,6 +3707,8 @@ export default middleware;
                             config.hugoYaml.giscusCategoryId = cleanValue(trimmed, 'categoryId:');
                         } else if (trimmed.startsWith('lang:')) {
                             config.hugoYaml.giscusLang = cleanValue(trimmed, 'lang:');
+                        } else if (trimmed.startsWith('termSuffix:')) {
+                            config.hugoYaml.giscusTermSuffix = cleanValue(trimmed, 'termSuffix:');
                         }
                     }
 

@@ -138,7 +138,13 @@
         {{- end }}
       </footer>
 
-      {{- if (.Param "comments") }}
+      {{- $showComments := false -}}
+      {{- if or $password (and .File (in .File.Path "protected")) -}}
+        {{- $showComments = eq .Params.comments true -}}
+      {{- else -}}
+        {{- $showComments = .Param "comments" -}}
+      {{- end -}}
+      {{- if $showComments }}
       <div id="comments" {{ if $password }}style="display:none" data-wait-enc="true"{{ end }}>
         {{- partial "comments.html" . }}
       </div>
