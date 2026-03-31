@@ -55,7 +55,7 @@ function processFile(filePath) {
   console.log(`[Encrypt] Processing: ${filePath}`);
 
   // 增强的正则，捕获密码、i18n 标签和待加密内容
-  const regex = /<div id="encrypt-container">[\s\S]*?<div id="hcl-pw-raw"[^>]*>([^<]+)<\/div>\s*(<div id="hcl-i18n"[\s\S]*?><\/div>)([\s\S]+?)<div id="hcl-content-end"[^>]*><\/div>[\s\S]*?<\/div>/g;
+  const regex = /<div id="encrypt-container">[\s\S]*?<div id="hcl-pw-raw"[^>]*>([^<]*)<\/div>\s*(<div id="hcl-i18n"[\s\S]*?><\/div>)([\s\S]+?)<div id="hcl-content-end"[^>]*><\/div>[\s\S]*?<\/div>/g;
 
   function getAttr(tag, attr) {
     const m = new RegExp(`${attr}="([^"]*)"`).exec(tag);
@@ -84,7 +84,7 @@ function processFile(filePath) {
     <div class="hcl-title">${t.title}</div>
     <div class="hcl-tip">${t.tip}</div>
     <div class="hcl-input-group">
-      <input type="password" id="hcl-pw-input" placeholder="${t.placeholder}" onkeypress="if(event.key==='Enter')hclDecrypt(null, true)">
+      <input type="password" id="hcl-pw-input" placeholder="${t.placeholder}" oninput="this.dataset.touched='true'" onkeypress="if(event.key==='Enter')hclDecrypt(null, true)">
       <button type="button" onclick="hclDecrypt(null, true)" class="hcl-btn-primary">${t.button}</button>
       <a href="javascript:history.back()" class="hcl-btn-back">${t.back}</a>
     </div>
@@ -256,6 +256,7 @@ function processFile(filePath) {
         msgEl.innerText = '${t.error}';
         inputEl.classList.add('error');
         inputEl.value = '';
+        inputEl.dataset.touched = 'false';
         card.style.animation = 'hclshake 0.5s cubic-bezier(.36,.07,.19,.97) both';
         setTimeout(() => { card.style.animation = ''; inputEl.classList.remove('error'); }, 1000);
       } else {
@@ -266,8 +267,13 @@ function processFile(filePath) {
 
   window.hclDecrypt = function(e, isManual) {
     if (e && e.preventDefault) e.preventDefault();
-    const pw = isManual ? document.getElementById('hcl-pw-input').value : e;
-    if (pw) decrypt(pw, isManual);
+    const inputEl = document.getElementById('hcl-pw-input');
+    const pw = isManual ? inputEl.value : e;
+    
+    // 如果是手动且为空密码，而且用户完全没碰过输入框，直接忽略（防止连点误开）
+    if (isManual && pw === '' && inputEl.dataset.touched !== 'true') return;
+
+    if (pw !== undefined && pw !== null) decrypt(pw, isManual);
   };
 
   // 自动解密检查

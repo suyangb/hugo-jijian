@@ -49,9 +49,9 @@
       {{- end }}
     </header>
 
-    {{- $password := .Params.mima | default .Params.password -}}
+    {{- $password := .Params.mima | default .Params.password | default "" -}}
     {{- if .Content }}
-      {{- if $password -}}
+      {{- if $isEncrypted -}}
       <div id="encrypt-container">
         <div id="hcl-pw-raw" style="display:none">{{ $password }}</div>
         <div id="hcl-i18n" style="display:none"
@@ -124,7 +124,7 @@
         </ul>
       </footer>
 
-      {{- if $password -}}
+      {{- if $isEncrypted -}}
         <div id="hcl-content-end" style="display:none"></div>
       </div> <!-- #encrypt-container 结束 -->
       {{- end }}
@@ -145,7 +145,7 @@
         {{- $showComments = .Param "comments" -}}
       {{- end -}}
       {{- if $showComments }}
-      <div id="comments" {{ if $password }}style="display:none" data-wait-enc="true"{{ end }}>
+      <div id="comments" {{ if $isEncrypted }}style="display:none" data-wait-enc="true"{{ end }}>
         {{- partial "comments.html" . }}
       </div>
       {{- end }}
