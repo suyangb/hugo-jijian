@@ -100,3 +100,14 @@
   translation: "没有找到关于 [SEARCH_TERM] 的结果。请尝试以下搜索之一："
 - id: search_searching
   translation: "正在搜索 [SEARCH_TERM]..."
+
+- id: markdown_alert_note
+  translation: "备注"
+- id: markdown_alert_tip
+  translation: "建议"
+- id: markdown_alert_important
+  translation: "重要"
+- id: markdown_alert_warning
+  translation: "警告"
+- id: markdown_alert_caution
+  translation: "注意"

@@ -101,3 +101,14 @@
   translation: "沒有找到关于 [SEARCH_TERM] 的結果。請嘗試以下搜尋之一："
 - id: search_searching
   translation: "正在搜尋 [SEARCH_TERM]..."
+
+- id: markdown_alert_note
+  translation: "備註"
+- id: markdown_alert_tip
+  translation: "建議"
+- id: markdown_alert_important
+  translation: "重要"
+- id: markdown_alert_warning
+  translation: "警告"
+- id: markdown_alert_caution
+  translation: "注意"

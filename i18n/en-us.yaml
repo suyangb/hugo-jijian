@@ -101,3 +101,14 @@
   translation: "No results for [SEARCH_TERM]. Try one of the following:"
 - id: search_searching
   translation: "Searching for [SEARCH_TERM]..."
+
+- id: markdown_alert_note
+  translation: "Note"
+- id: markdown_alert_tip
+  translation: "Tip"
+- id: markdown_alert_important
+  translation: "Important"
+- id: markdown_alert_warning
+  translation: "Warning"
+- id: markdown_alert_caution
+  translation: "Caution"
