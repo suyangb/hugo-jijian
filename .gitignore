@@ -11,3 +11,14 @@ Thumbs.db
 # 临时文件
 *.tmp
 *.temp
+
+# 建议移除的项目
+/.hugo_build.lock
+/data/
+/public/
+/.venv/
+/static/pagefind/
+/node_modules/
+package-lock.json
+/*.ssjson
+/resources/
