@@ -22,3 +22,6 @@ Thumbs.db
 package-lock.json
 /*.ssjson
 /resources/
+
+# 配置工具文件
+极简(hugo-jijian)配置工具-config-tools.html
