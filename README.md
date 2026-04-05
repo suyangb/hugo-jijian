@@ -1,8 +1,8 @@
 # Hugo jijian（极简）
 
-[极简（jijian）](https://github.com/hcllmsx/hugo-jijian)是基于 [PaperMod](https://github.com/adityatelange/hugo-PaperMod) 二次开发的 Hugo 主题，更简洁、极致高效，针对中文用户优化。
+[极简(jijian)](https://github.com/hcllmsx/hugo-jijian)是基于 [PaperMod](https://github.com/adityatelange/hugo-PaperMod) 二次开发的 Hugo 主题，更简洁、极致高效，针对中文用户优化。
 
-![极简(hugo-jijian)主题-首页展示](./docs/images/2026.03.27-极简jijian主题_首页黑白模式切换动态图.gif)
+![极简(jijian)主题-名片模式首页](./docs/images/2026.03.27-极简jijian主题_首页黑白模式切换动态图.gif)
 
 ## 特性概览
 
@@ -24,9 +24,12 @@
 
 ## 更新日志
 
+### 2026-04-06 00:05
+- EdgeOne Pages其实是有Hugo支持的，只是在列表中没有显示。但它依然支持识别HUGO_VERSION环境变量，因此我们可以不需要使用edgeone.json文件来下载hugo了。直接移除，然后和其他云平台使用同一`package.json`文件。
+
 ### 2026-03-31 19:03
-- 代码高亮样式改为github的样式，支持黑白模式。且不再支持更换为其他高亮风格
-- 将所有 HTTP 请求升级为 HTTPS（修复网易云音乐外链播放器在手机端不显示的问题）
+- 代码高亮样式改为github的样式，支持黑白模式。且不再支持更换为其他高亮风格。
+- 将所有 HTTP 请求升级为 HTTPS（修复网易云音乐外链播放器在手机端不显示的问题）。
 - 完美支持了原生 GitHub 样式的提示框（Alerts），现在只需使用 `> [!NOTE]` 等语法即可直接生成漂亮的警示块。
 - 用户在创建评论时，若文章标题为中文，此前由 giscus [bot] 在 GitHub Discussions 中生成的帖子标题会显示为 URL 编码格式，目前该问题已修复。
 - 优化了giscus评论系统的配置，现在可以在`hugo.yaml`中配置`termSuffix`参数，用于指定GitHub Discussions帖子标题后缀，配置后生成讨论帖的标题格式为“文章名-XXXX”。
