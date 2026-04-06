@@ -12,6 +12,21 @@
   {{- end }}
 
   <article class="post-single" {{ if or (and .File (in .File.Path "protected")) .Params.mima .Params.password }}data-pagefind-ignore{{ else }}data-pagefind-body{{ end }}>
+    {{- /* Pagefind 搜索结果缩略图：cover.image → defaultImage → favicon */ -}}
+    {{- $pfCoverImage := .Params.cover.image -}}
+    {{- if not $pfCoverImage }}{{ $pfCoverImage = site.Params.defaultImage }}{{ end -}}
+    {{- if not $pfCoverImage }}{{ $pfCoverImage = site.Params.assets.favicon }}{{ end -}}
+    {{- if $pfCoverImage -}}
+      {{- $pfCoverUrl := "" -}}
+      {{- $pfCoverRes := (.Resources.ByType "image").GetMatch (printf "*%s*" $pfCoverImage) -}}
+      {{- if $pfCoverRes -}}
+        {{- $pfCoverUrl = $pfCoverRes.Permalink -}}
+      {{- else -}}
+        {{- $pfCoverUrl = ($pfCoverImage | absURL) -}}
+      {{- end -}}
+      {{- $pfCoverAlt := .Params.cover.alt | default .Title -}}
+      <img src="{{ $pfCoverUrl }}" alt="{{ $pfCoverAlt }}" style="display:none" data-pagefind-meta="image[src], image_alt[alt]">
+    {{- end -}}
     {{- $isHidden := (.Param "cover.hiddenInSingle") | default (.Param "cover.hidden") | default false }}
     {{- partial "cover.html" (dict "cxt" . "IsSingle" true "isHidden" $isHidden) }}
 
