@@ -24,6 +24,9 @@
 
 ## 更新日志
 
+### 2026-04-06 09:50
+- 修复pagefind搜索时错误抓取了topCover的问题，现在抓取的是cover，没有则使用defaultImage。如果defaultImage也没有，就显示网站的favicon图标。
+
 ### 2026-04-06 00:05
 - EdgeOne Pages其实是有Hugo支持的，只是在列表中没有显示。但它依然支持识别HUGO_VERSION环境变量，因此我们可以不需要使用edgeone.json文件来下载hugo了。直接移除，然后和其他云平台使用同一`package.json`文件。
 
